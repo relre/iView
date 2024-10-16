@@ -1,22 +1,29 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
-interface IQuestionPackage extends Document {
-  title: string;
-  questions: Array<{
-    text: string;
-    minutes: number;
-    order: number;
-  }>;
+export interface IQuestion extends Document {
+  _id: Types.ObjectId;
+  text: string;
+  minutes: number;
+  order: number;
 }
 
-const QuestionPackageSchema: Schema = new Schema({
-  title: { type: String, required: true },
-  questions: [{
-    text: { type: String, required: true },
-    minutes: { type: Number, required: true },
-    order: { type: Number, required: true },
-  }],
+export interface IQuestionPackage extends Document {
+  title: string;
+  questions: Types.DocumentArray<IQuestion>;
+}
+
+const QuestionSchema = new Schema<IQuestion>({
+  _id: { type: Schema.Types.ObjectId, auto: true },
+  text: { type: String, required: true },
+  minutes: { type: Number, required: true },
+  order: { type: Number, required: true }
 });
 
-const QuestionPackage = mongoose.model<IQuestionPackage>('QuestionPackage', QuestionPackageSchema);
+const QuestionPackageSchema = new Schema<IQuestionPackage>({
+  title: { type: String, required: true },
+  questions: [QuestionSchema]
+});
+
+const QuestionPackage = model<IQuestionPackage>('QuestionPackage', QuestionPackageSchema);
+
 export default QuestionPackage;

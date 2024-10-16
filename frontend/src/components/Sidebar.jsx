@@ -10,7 +10,7 @@ const Sidebar = () => {
             <Link to="/admin">Admins</Link>
           </li>
           <li className="p-4 hover:bg-gray-700">
-            <Link to="/question-packages">Question Packages</Link>
+            <Link to="/admin/question-packages">Question Packages</Link>
           </li>
         </ul>
       </nav>
