@@ -77,6 +77,25 @@ export const addQuestionToPackage = async (req: Request, res: Response) => {
   }
 };
 
+export const updateQuestionOrder = async (req: Request, res: Response) => {
+  const { id } = req.params; // Soru paketi ID'si
+  const { questions } = req.body; // Güncellenen soruların dizisi
+  try {
+    const questionPackage = await QuestionPackage.findById(id); // Soru paketini bul
+    if (!questionPackage) {
+      return res.status(404).json({ message: 'Question package not found' });
+    }
+
+    // Soruların sırasını güncelle
+    questionPackage.questions = questions; // Yeni sıralamayı ata
+    await questionPackage.save(); // Güncellemeyi kaydet
+
+    res.status(200).json({ message: 'Sıra başarıyla güncellendi', questionPackage });
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
+  }
+};
+
 export const updateQuestionInPackage = async (req: Request, res: Response) => {
   const { id, questionId } = req.params;
   const { text, minutes, order } = req.body;

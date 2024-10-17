@@ -56,7 +56,9 @@ const QuestionPackagePage = () => {
         {questionPackages.map((pkg) => (
           <li key={pkg._id} className="p-2 bg-white mb-2 rounded shadow">
             <div className="flex justify-between items-center">
-              <Link to={`/admin/questions-package/${pkg._id}`} className="text-blue-500">{pkg.title}</Link>
+              <Link to={`/admin/questions-package/${pkg._id}`} className="text-blue-500">
+                {pkg.title} ({pkg.questions.length} questions)
+              </Link>
               <div>
                 <button onClick={() => openEditForm(pkg)} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
                 <button onClick={() => handleDelete(pkg._id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>

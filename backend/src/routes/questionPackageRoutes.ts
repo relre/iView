@@ -7,7 +7,8 @@ import {
   getQuestionsByPackageId,
   addQuestionToPackage,
   updateQuestionInPackage,
-  deleteQuestionFromPackage
+  deleteQuestionFromPackage,
+  updateQuestionOrder
 } from '../controllers/questionPackageController';
 
 const router = Router();
@@ -22,5 +23,7 @@ router.get('/question-packages/:id/questions', getQuestionsByPackageId);
 router.post('/question-packages/:id/questions', addQuestionToPackage);
 router.put('/question-packages/:id/questions/:questionId', updateQuestionInPackage);
 router.delete('/question-packages/:id/questions/:questionId', deleteQuestionFromPackage);
+router.put('/question-packages//:id/questions/order', updateQuestionOrder);
+
 
 export default router;
