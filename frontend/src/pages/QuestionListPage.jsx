@@ -193,7 +193,7 @@ const Question = ({ question, index, moveQuestion, openEditQuestionForm, handleD
   return (
     <li ref={ref} className={`p-2 bg-white mb-2 rounded shadow ${isDragging ? 'opacity-50' : ''}`}>
       <div className="flex justify-between items-center">
-        <span>{question.text || 'No text available'}</span>
+        <span>{question.text || 'No text available'} - {question.minutes} minutes</span>
         <div>
           <button onClick={() => openEditQuestionForm(question)} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
           <button onClick={() => handleDeleteQuestion(question._id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>

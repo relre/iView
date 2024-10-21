@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import questionPackageRoutes from './routes/questionPackageRoutes';
 import authRoutes from './routes/authRoutes';
+import interviewRoutes from './routes/interviewRoutes'
 
 dotenv.config();
 
@@ -18,7 +19,9 @@ mongoose.connect(process.env.MONGO_URI!, { })
   .catch(err => console.log(err));
 
 app.use('/api', questionPackageRoutes);
+app.use('/api', interviewRoutes);
 app.use('/api/auth', authRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('HR App Backend');
