@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const useInterviewStore = create((set) => ({
   interviews: [],
-  questionPackages: [],
+  applications: [],
   fetchInterviews: async () => {
     try {
       const response = await fetch('http://localhost:5555/api/interview');
@@ -54,6 +54,37 @@ const useInterviewStore = create((set) => ({
       }));
     } catch (error) {
       console.error('Failed to delete interview:', error);
+    }
+  },
+  addApplication: async (link, interviewId, application) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(application),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add application');
+      }
+      const newApplication = await response.json();
+      set((state) => ({
+        applications: [...state.applications, newApplication],
+      }));
+    } catch (error) {
+      console.error('Failed to add application:', error);
+    }
+  },
+  fetchApplications: async (link, interviewId) => {
+    try {
+      console.log(`Fetching applications for interview ID: ${interviewId}`); // Debug log
+      const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`);
+      const data = await response.json();
+      console.log('Fetched applications:', data); // Debug log
+      set({ applications: data });
+    } catch (error) {
+      console.error('Failed to fetch applications:', error);
     }
   },
 }));

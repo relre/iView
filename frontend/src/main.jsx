@@ -8,7 +8,12 @@ import QuestionListPage from './pages/QuestionListPage';
 import LoginPage from './pages/LoginPage';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
-import InterviewPage from './pages/InterviewPage'; // Yeni sayfa eklendi
+import InterviewPage from './pages/InterviewPage';
+import ApplicationForm from './pages/ApplicationForm';
+import ApplicationsPage from './pages/ApplicationsPage'; // AdminApplicationsPage bileşenini içe aktarın
+
+// Router yapılandırması
+
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
@@ -26,12 +31,15 @@ createRoot(document.getElementById('root')).render(
                   <Route path="admins" element={<AdminPage />} />
                   <Route path="question-packages" element={<QuestionPackagePage />} />
                   <Route path="questions-package/:id" element={<QuestionListPage />} />
-                  <Route path="interviews" element={<InterviewPage />} /> {/* Yeni rota eklendi */}
+                  <Route path="interviews" element={<InterviewPage />} />
+                  <Route path="interview/:link/:id" element={<ApplicationsPage />} />
+
                 </Routes>
               </Layout>
             </ProtectedRoute>
           }
         />
+        <Route path="/interview/:link/:id" element={<ApplicationForm />} /> {/* Yeni rota eklendi */}
       </Routes>
     </Router>
   </StrictMode>,

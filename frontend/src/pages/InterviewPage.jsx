@@ -61,9 +61,9 @@ const InterviewPage = () => {
     });
   };
 
-  const filteredQuestionPackages = questionPackages.filter((pack) =>
+  const filteredQuestionPackages = questionPackages?.filter((pack) =>
     pack.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ) || [];
 
   return (
     <div>
@@ -127,20 +127,14 @@ const InterviewPage = () => {
         {interviews.map((interview) => (
           <li key={interview._id} className="p-2 bg-white mb-2 rounded shadow flex justify-between items-center">
             <div>
-              <h2 className="text-xl font-bold">{interview.title}</h2>
+              <h2 className="text-xl font-bold">
+
+              <a href={`/admin/interview/${interview.link}/${interview._id}`}
+               >{interview.title}</a>
+                
+                </h2>
               <p>Published: {interview.isPublished ? 'Yes' : 'No'}</p>
-              <p>Link: <a href={interview.link} target="_blank" rel="noopener noreferrer">{interview.link}</a></p>
-              <h3 className="text-lg font-bold mt-2">Questions:</h3>
-              <ul>
-                {interview.questions.map((question, index) => (
-                  <li key={index}>{question.text} - {question.minutes} minutes</li>
-                ))}
-                {interview.questionPacks.map((pack) =>
-                  pack.questions.map((question, index) => (
-                    <li key={index}>{question.text} - {question.minutes} minutes</li>
-                  ))
-                )}
-              </ul>
+              <p>Link: <a href={`/interview/${interview.link}/${interview._id}`} target="_blank" rel="noopener noreferrer">{interview.link}</a></p>
             </div>
             <button
               onClick={() => deleteInterview(interview._id)}
