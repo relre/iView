@@ -16,7 +16,7 @@ const Sidebar = () => {
 
 
   return (
-    <aside className="sticky w-64">
+    <aside className="sticky flex flex-col w-64">
       
       <div className="flex p-4 justify-center">
         <a href="/admin"><img src={logo} className="max-w-[10rem]" alt="logo" /></a>
@@ -34,7 +34,7 @@ const Sidebar = () => {
       </nav>
       <div>
 
-      <div class="flex flex-col justify-end h-64">
+      <div class="flex flex-col justify-end mb-10 h-64">
       <span className="mx-auto mb-2">{email}</span>
         <button onClick={handleLogout} className="border flex mx-auto p-2 w-1/2 rounded-md">
         <ArrowRightEndOnRectangleIcon   className="h-6 w-6 mr-2 text-black ml-2" /> Logout
