@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         rtwyellow: '#f8ca53',
         rtwgreenligth: '#EEFAF9',
+        rtwgreenligth2: '#dcf4f2',
         rtwgreen: '#29b3ac',
         rtwgreendark: '#33958e',
         rtwgray: '#6b7280',

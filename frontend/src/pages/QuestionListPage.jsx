@@ -154,13 +154,12 @@ const QuestionListPage = () => {
             <tr>
               <th className="py-2 px-4 border-b text-start">
                 <div className="flex items-center justify-start space-x-1">
-                  <QuestionMarkCircleIcon className="w-6 h-6 text-black mr-1" />
                   Questions
                 </div>
               </th>
               <th className="py-2 px-4 border-b text-end">
-                <div className="flex items-center justify-end space-x-1">
-                  <ClockIcon className="w-6 h-6 text-black mr-1" />
+                <div className="flex items-center justify-end space-x-1 mr-3">
+                  
                   Minutes
                 </div>
               </th>
