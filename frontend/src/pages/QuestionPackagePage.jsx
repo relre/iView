@@ -92,7 +92,7 @@ const QuestionPackagePage = () => {
             return (
               <tr key={pkg._id} className="p-2 bg-white mb-2 rounded shadow-sm hover:bg-rtwgreenligth">
                 <td className="py-2 px-4 border-l border-t border-b rounded-l-lg">
-                  <Link to={`/admin/questions-package/${pkg._id}`} className="text-rtwgreen">
+                  <Link to={`/admin/questions-package/${pkg._id}`} className="text-rtwgreendark">
                     {pkg.title}
                   </Link>
                 </td>

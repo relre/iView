@@ -13,3 +13,12 @@ body {
 .green-gradient {
   background: linear-gradient(31deg, rgb(255 255 255) 15%, rgb(181 225 223) 100%);
 }
+
+.css-d7l1ni-option {
+  background-color: #EEFAF9 !important;
+}
+
+.css-t3ipsp-control {
+  border-color:#29b3ac !important;
+  box-shadow:0 0 0 1px #29b3ac !important;
+}

@@ -34,7 +34,7 @@ const Sidebar = () => {
       </nav>
       <div>
 
-      <div class="flex flex-col justify-end mb-10 h-64">
+      <div className="flex flex-col justify-end mb-10 h-64">
       <span className="mx-auto mb-2">{email}</span>
         <button onClick={handleLogout} className="border flex mx-auto p-2 w-1/2 rounded-md">
         <ArrowRightEndOnRectangleIcon   className="h-6 w-6 mr-2 text-black ml-2" /> Logout
