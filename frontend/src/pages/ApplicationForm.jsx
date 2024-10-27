@@ -20,6 +20,7 @@ const ApplicationForm = () => {
   const [videoBlob, setVideoBlob] = useState(null);
   const [timer, setTimer] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
+  const [showSubmitButton, setShowSubmitButton] = useState(false); // Submit butonunun görünürlüğü
   const videoRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -40,15 +41,11 @@ const ApplicationForm = () => {
     } else {
       console.log('Submitting form data:', formData);
       try {
-        let videoUrl = '';
         if (videoBlob) {
-          videoUrl = await uploadVideo(videoBlob);
-          setFormData((prevData) => ({
-            ...prevData,
-            videoUrl: videoUrl,
-          }));
+          const videoUrl = await uploadVideo(videoBlob);
+          formData.videoUrl = videoUrl; // videoUrl'yi doğrudan formData'ya ata
         }
-        await addApplication(link, id, { ...formData, videoUrl });
+        await addApplication(link, id, formData);
         alert('Application submitted successfully');
       } catch (error) {
         console.error('Failed to submit application:', error);
@@ -102,8 +99,10 @@ const ApplicationForm = () => {
 
   const stopRecording = () => {
     mediaRecorder.stop();
+    handleSubmit();
     setRecording(false);
     stopTimer();
+    setShowSubmitButton(true); // Stop Recording butonuna tıklandığında Submit butonunu göster
   };
 
   const startTimer = () => {
@@ -147,8 +146,8 @@ const ApplicationForm = () => {
       throw new Error('Server response is not JSON');
     }
   
-    const data = await response.json();
-    return data.url;
+    await response.json();
+    return fileName; // Return the fileName instead of data.url
   };
 
   return (
@@ -232,9 +231,11 @@ const ApplicationForm = () => {
               <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
             </div>
           </div>
-          <button onClick={handleSubmit} className="bg-green-500 text-white px-4 py-2 rounded mt-4">
-            Submit Application
-          </button>
+          {showSubmitButton && ( // showSubmitButton durumuna göre butonun görünürlüğünü kontrol et
+            <button onClick={handleSubmit} className="bg-green-500 text-white px-4 py-2 rounded mt-4">
+              Submit Application
+            </button>
+          )}
         </div>
       )}
     </div>

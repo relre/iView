@@ -58,6 +58,7 @@ const useInterviewStore = create((set) => ({
   },
   addApplication: async (link, interviewId, application) => {
     try {
+      console.log('Adding application:', application); // Debug log
       const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`, {
         method: 'POST',
         headers: {
@@ -66,7 +67,8 @@ const useInterviewStore = create((set) => ({
         body: JSON.stringify(application),
       });
       if (!response.ok) {
-        throw new Error('Failed to add application');
+        const errorText = await response.text();
+        throw new Error(`Failed to add application: ${errorText}`);
       }
       const newApplication = await response.json();
       set((state) => ({
