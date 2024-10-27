@@ -126,9 +126,15 @@ const ApplicationForm = () => {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
+  const generateRandomId = () => {
+    return Math.random().toString(36).substr(2, 9);
+  };
+
   const uploadVideo = async (blob) => {
     const formData = new FormData();
-    formData.append('file', blob, 'interxview.webm');
+    const randomId = generateRandomId();
+    const fileName = `${randomId}.webm`;
+    formData.append('file', blob, fileName);
     
     const response = await fetch('http://localhost:5555/api/upload', {
       method: 'POST',
