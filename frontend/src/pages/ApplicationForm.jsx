@@ -4,7 +4,7 @@ import useInterviewStore from '../store/interviewStore';
 
 const ApplicationForm = () => {
   const { link, id } = useParams();
-  const { addApplication } = useInterviewStore();
+  const { addApplication, fetchInterviewQuestions, interviewQuestions } = useInterviewStore();
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
@@ -16,16 +16,22 @@ const ApplicationForm = () => {
   const [step, setStep] = useState(1);
   const [recording, setRecording] = useState(false);
   const [mediaStream, setMediaStream] = useState(null);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const mediaRecorderRef = useRef(null); // mediaRecorder nesnesini ref olarak sakla
   const [videoBlob, setVideoBlob] = useState(null);
   const [timer, setTimer] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
-  const [showSubmitButton, setShowSubmitButton] = useState(false); // Submit butonunun görünürlüğü
-  const [warningMessage, setWarningMessage] = useState(''); // Uyarı mesajı için state
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [currentQuestion, setCurrentQuestion] = useState(null);
   const videoRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const timerIntervalRef = useRef(null);
+  const questionTimerRef = useRef(null);
+
+  useEffect(() => {
+    fetchInterviewQuestions(id);
+  }, [fetchInterviewQuestions, id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -49,7 +55,7 @@ const ApplicationForm = () => {
       try {
         if (videoBlob) {
           const videoUrl = await uploadVideo(videoBlob);
-          formData.videoUrl = videoUrl; // videoUrl'yi doğrudan formData'ya ata
+          formData.videoUrl = videoUrl;
         }
         await addApplication(link, id, formData);
         setWarningMessage('Application submitted successfully');
@@ -89,8 +95,9 @@ const ApplicationForm = () => {
   };
 
   const startRecording = () => {
+    console.log('Starting recording...'); // Debug log
     const recorder = new MediaRecorder(mediaStream);
-    setMediaRecorder(recorder);
+    mediaRecorderRef.current = recorder; // mediaRecorder nesnesini ref'e ata
     const chunks = [];
     recorder.ondataavailable = (e) => chunks.push(e.data);
     recorder.onstop = () => {
@@ -99,15 +106,25 @@ const ApplicationForm = () => {
       mediaStream.getTracks().forEach(track => track.stop());
     };
     recorder.start();
+    console.log('MediaRecorder state:', recorder.state); // Debug log
     setRecording(true);
     startTimer();
+    startQuestionTimer();
   };
 
   const stopRecording = () => {
-    mediaRecorder.stop();
-    setRecording(false);
-    stopTimer();
-    setShowSubmitButton(true); // Stop Recording butonuna tıklandığında Submit butonunu göster
+    console.log('Stopping recording...'); // Debug log
+    const recorder = mediaRecorderRef.current; // ref'ten mediaRecorder nesnesini al
+    if (recorder && recorder.state !== 'inactive') {
+      console.log('MediaRecorder state:', recorder.state); // Debug log
+      recorder.stop();
+      setRecording(false);
+      stopTimer();
+      stopQuestionTimer();
+      setShowSubmitButton(true);
+    } else {
+      console.log('MediaRecorder is already inactive or not initialized.'); // Debug log
+    }
   };
 
   const startTimer = () => {
@@ -119,6 +136,30 @@ const ApplicationForm = () => {
 
   const stopTimer = () => {
     clearInterval(timerIntervalRef.current);
+  };
+
+  const startQuestionTimer = () => {
+    let questionIndex = 0;
+    const showNextQuestion = () => {
+      if (questionIndex < interviewQuestions.length) {
+        setCurrentQuestion(interviewQuestions[questionIndex]);
+        const questionDuration = interviewQuestions[questionIndex].minutes * 1000; // Saniye olarak kullan
+        questionTimerRef.current = setTimeout(() => {
+          questionIndex++;
+          showNextQuestion();
+        }, questionDuration);
+      } else {
+        setCurrentQuestion(null);
+        console.log('All questions completed. Stopping recording...'); // Debug log
+        stopRecording(); // Tüm soruların süresi bittiğinde videoyu durdur
+        setShowSubmitButton(true); // Submit butonunu göster
+      }
+    };
+    showNextQuestion();
+  };
+
+  const stopQuestionTimer = () => {
+    clearTimeout(questionTimerRef.current);
   };
 
   const formatTime = (seconds) => {
@@ -152,7 +193,7 @@ const ApplicationForm = () => {
     }
   
     await response.json();
-    return fileName; // Return the fileName instead of data.url
+    return fileName;
   };
 
   return (
@@ -211,33 +252,42 @@ const ApplicationForm = () => {
       ) : (
         <div>
           <h2 className="text-xl font-bold mb-4">Video Recording and Questions</h2>
-          <div className="relative">
-            <video ref={videoRef} autoPlay muted className="w-half mb-4"></video>
-            {recording && (
-              <div className="absolute top-0 left-0 bg-black text-white p-1 text-xs">
-                {formatTime(timer)}
+          {!showSubmitButton && (
+            <>
+              <div className="relative">
+                <video ref={videoRef} autoPlay muted className="w-half mb-4"></video>
+                {recording && (
+                  <div className="absolute top-0 left-0 bg-black text-white p-1 text-xs">
+                    {formatTime(timer)}
+                  </div>
+                )}
+                {currentQuestion && (
+                  <div className="absolute top-0 right-0 bg-white text-black p-2 rounded shadow-md">
+                    {currentQuestion.text} ({currentQuestion.minutes} seconds)
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          {!mediaStream ? (
-            <button onClick={requestCameraPermissions} className="bg-blue-500 text-white px-4 py-2 rounded">
-              Open Camera
-            </button>
-          ) : recording ? (
-            <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 rounded">
-              Stop Recording
-            </button>
-          ) : (
-            <button onClick={startRecording} className="bg-green-500 text-white px-4 py-2 rounded">
-              Start Recording
-            </button>
+              {!mediaStream ? (
+                <button onClick={requestCameraPermissions} className="bg-blue-500 text-white px-4 py-2 rounded">
+                  Open Camera
+                </button>
+              ) : recording ? (
+                <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 rounded">
+                  Stop Recording
+                </button>
+              ) : (
+                <button onClick={startRecording} className="bg-green-500 text-white px-4 py-2 rounded">
+                  Start Recording
+                </button>
+              )}
+              <div className="mt-4">
+                <div className="bg-gray-200 w-1/6 h-2 rounded">
+                  <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
+                </div>
+              </div>
+            </>
           )}
-          <div className="mt-4">
-            <div className="bg-gray-200 w-full h-2 rounded">
-              <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
-            </div>
-          </div>
-          {showSubmitButton && ( // showSubmitButton durumuna göre butonun görünürlüğünü kontrol et
+          {showSubmitButton && (
             <button onClick={handleSubmit} className="bg-green-500 text-white px-4 py-2 rounded mt-4">
               Submit Application
             </button>

@@ -22,11 +22,13 @@ const useInterviewStore = create((set) => ({
       console.error('Failed to fetch question packages:', error);
     }
   },
-  fetchInterviewQuestions: async (link, id) => {
+   fetchInterviewQuestions: async (id) => {
     try {
-      const response = await fetch(`/interview/${id}`);
+      const response = await fetch(`http://localhost:5555/api/interview/${id}`);
       const data = await response.json();
-      set({ interviewQuestions: data.questions });
+      console.log('Fetched interview questions:', data); // Konsola yazdır
+      const questions = data.questionPacks.flatMap(pack => pack.questions);
+      set({ interviewQuestions: questions });
     } catch (error) {
       console.error('Failed to fetch interview questions:', error);
     }
