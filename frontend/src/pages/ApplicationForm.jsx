@@ -18,7 +18,6 @@ const ApplicationForm = () => {
   const [mediaStream, setMediaStream] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [videoBlob, setVideoBlob] = useState(null);
-  const [videoUrl, setVideoUrl] = useState('');
   const [timer, setTimer] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const videoRef = useRef(null);
@@ -94,8 +93,6 @@ const ApplicationForm = () => {
     recorder.onstop = () => {
       const blob = new Blob(chunks, { type: 'video/webm' });
       setVideoBlob(blob);
-      const url = URL.createObjectURL(blob);
-      setVideoUrl(url);
       mediaStream.getTracks().forEach(track => track.stop());
     };
     recorder.start();
@@ -229,13 +226,6 @@ const ApplicationForm = () => {
             <button onClick={startRecording} className="bg-green-500 text-white px-4 py-2 rounded">
               Start Recording
             </button>
-          )}
-          {videoUrl && (
-            <div className="mt-4">
-              <a href={videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                Watch Recorded Video
-              </a>
-            </div>
           )}
           <div className="mt-4">
             <div className="bg-gray-200 w-full h-2 rounded">
