@@ -8,6 +8,7 @@ import {
   addApplication,
   getApplications,
   updateApplicationStatus,
+  getApplicationById,
 } from '../controllers/interviewController';
 
 const router = Router();
@@ -22,5 +23,6 @@ router.delete('/interview/:id', deleteInterview);
 router.post('/interview/:id/applications', addApplication);
 router.get('/interview/:id/applications', getApplications);
 router.put('/interview/:id/applications/:applicationId', updateApplicationStatus);
+router.get('/interview/:id/applications/:applicationId', getApplicationById); 
 
 export default router;

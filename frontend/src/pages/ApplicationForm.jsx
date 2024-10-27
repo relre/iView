@@ -21,6 +21,7 @@ const ApplicationForm = () => {
   const [timer, setTimer] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const [showSubmitButton, setShowSubmitButton] = useState(false); // Submit butonunun görünürlüğü
+  const [warningMessage, setWarningMessage] = useState(''); // Uyarı mesajı için state
   const videoRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -37,6 +38,11 @@ const ApplicationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (step === 1) {
+      if (!formData.gdprConsent) {
+        setWarningMessage('You must consent to the GDPR policy to proceed.');
+        return;
+      }
+      setWarningMessage('');
       setStep(2);
     } else {
       console.log('Submitting form data:', formData);
@@ -46,10 +52,10 @@ const ApplicationForm = () => {
           formData.videoUrl = videoUrl; // videoUrl'yi doğrudan formData'ya ata
         }
         await addApplication(link, id, formData);
-        alert('Application submitted successfully');
+        setWarningMessage('Application submitted successfully');
       } catch (error) {
         console.error('Failed to submit application:', error);
-        alert(`Failed to submit application: ${error.message}`);
+        setWarningMessage(`Failed to submit application: ${error.message}`);
       }
     }
   };
@@ -99,7 +105,6 @@ const ApplicationForm = () => {
 
   const stopRecording = () => {
     mediaRecorder.stop();
-    handleSubmit();
     setRecording(false);
     stopTimer();
     setShowSubmitButton(true); // Stop Recording butonuna tıklandığında Submit butonunu göster
@@ -198,6 +203,7 @@ const ApplicationForm = () => {
             onChange={handleChange}
             className="mb-2"
           /> I consent to the GDPR policy
+          {warningMessage && <p className="text-red-500">{warningMessage}</p>}
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
             Next
           </button>
@@ -236,6 +242,7 @@ const ApplicationForm = () => {
               Submit Application
             </button>
           )}
+          {warningMessage && <p className="text-red-500">{warningMessage}</p>}
         </div>
       )}
     </div>

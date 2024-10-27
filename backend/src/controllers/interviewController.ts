@@ -58,6 +58,25 @@ export const deleteInterview = async (req: Request, res: Response): Promise<void
   }
 };
 
+export const getApplicationById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    console.log(`Request params: ${JSON.stringify(req.params)}`);
+    const application = await interviewService.getApplicationById(req.params.id, req.params.applicationId);
+    if (application) {
+      res.status(200).json(application);
+    } else {
+      res.status(404).json({ message: 'Application not found' });
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Error: ${error.message}`);
+    } else {
+      console.error('Unknown error', error);
+    }
+    res.status(500).json({ message: 'Error fetching application', error });
+  }
+};
+
 export const addApplication = async (req: Request, res: Response): Promise<void> => {
   try {
     const application = await interviewService.addApplication(req.params.id, req.body);

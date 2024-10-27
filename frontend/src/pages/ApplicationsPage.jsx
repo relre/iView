@@ -1,14 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
 
 const ApplicationsPage = () => {
   const { link, id } = useParams();
-  const { applications, fetchApplications } = useInterviewStore();
+  const { applications = [], fetchApplications, togglePublishStatus, updateExpireDate } = useInterviewStore();
+
 
   useEffect(() => {
-    fetchApplications(link, id); // Belirli bir mülakatın başvurularını almak için
+    fetchApplications(link, id);
+  
   }, [fetchApplications, link, id]);
+
+
 
   return (
     <div>
@@ -21,11 +25,11 @@ const ApplicationsPage = () => {
             <p><strong>Surname:</strong> {application.surname}</p>
             <p><strong>Email:</strong> {application.email}</p>
             <p><strong>Phone:</strong> {application.phone}</p>
-            <p><strong>GDPR Consent:</strong> {application.gdprConsent ? 'Yes' : 'No'}</p>
             <p><strong>Video URL:</strong> {application.videoUrl}</p>
           </li>
         ))}
       </ul>
+    
     </div>
   );
 };
