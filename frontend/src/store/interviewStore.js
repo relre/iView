@@ -3,6 +3,7 @@ import { create } from 'zustand';
 const useInterviewStore = create((set) => ({
   interviews: [],
   applications: [],
+  application: null,
   fetchInterviews: async () => {
     try {
       const response = await fetch('http://localhost:5555/api/interview');
@@ -21,12 +22,11 @@ const useInterviewStore = create((set) => ({
       console.error('Failed to fetch question packages:', error);
     }
   },
-
   fetchInterviewQuestions: async (link, id) => {
     try {
-      const response = await fetch(`/api/interview/${id}`);
+      const response = await fetch(`/interview/${id}`);
       const data = await response.json();
-      set({ interviewQuestions: data.questionPacks }); // Assuming the interview object contains a `questionPacks` array
+      set({ interviewQuestions: data.questions });
     } catch (error) {
       console.error('Failed to fetch interview questions:', error);
     }
@@ -97,6 +97,39 @@ const useInterviewStore = create((set) => ({
       set({ applications: data });
     } catch (error) {
       console.error('Failed to fetch applications:', error);
+    }
+  },
+  fetchApplicationById: async (id, applicationId) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${id}/applications/${applicationId}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch application by ID: ${errorText}`);
+      }
+      const data = await response.json();
+      set({ application: data });
+    } catch (error) {
+      console.error('Failed to fetch application by ID:', error);
+    }
+  },
+  updateApplicationStatus: async (id, applicationId, status) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${id}/applications/${applicationId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to update application status: ${errorText}`);
+      }
+      const updatedApplication = await response.json();
+      set({ application: updatedApplication });
+      console.log('Application status updated:', updatedApplication); // Debug log
+    } catch (error) {
+      console.error('Failed to update application status:', error);
     }
   },
 }));

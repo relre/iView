@@ -12,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import InterviewPage from './pages/InterviewPage';
 import ApplicationForm from './pages/ApplicationForm';
 import ApplicationsPage from './pages/ApplicationsPage'; // AdminApplicationsPage bileşenini içe aktarın
+import ApplicationDetailPage from './pages/ApplicationDetailPage'; // ApplicationDetailPage bileşenini içe aktarın
 
 // Router yapılandırması
 
@@ -36,7 +37,7 @@ createRoot(document.getElementById('root')).render(
                   <Route path="questions-package/:id" element={<QuestionListPage />} />
                   <Route path="interviews" element={<InterviewPage />} />
                   <Route path="interview/:link/:id" element={<ApplicationsPage />} />
-
+                  <Route path="interview/:id/applications/:applicationId" element={<ApplicationDetailPage/>} />
                 </Routes>
               </Layout>
             </ProtectedRoute>

@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
 
 const ApplicationsPage = () => {
   const { link, id } = useParams();
-  const { applications = [], fetchApplications, togglePublishStatus, updateExpireDate } = useInterviewStore();
-
+  const { applications = [], fetchApplications } = useInterviewStore();
 
   useEffect(() => {
     fetchApplications(link, id);
-  
   }, [fetchApplications, link, id]);
-
-
 
   return (
     <div>
@@ -21,15 +17,16 @@ const ApplicationsPage = () => {
       <ul>
         {applications.map((application) => (
           <li key={application._id} className="mb-2 p-2 border border-gray-300 rounded">
-            <p><strong>Name:</strong> {application.name}</p>
-            <p><strong>Surname:</strong> {application.surname}</p>
-            <p><strong>Email:</strong> {application.email}</p>
-            <p><strong>Phone:</strong> {application.phone}</p>
-            <p><strong>Video URL:</strong> {application.videoUrl}</p>
+            <Link to={`/admin/interview/${id}/applications/${application._id}`}>
+              <p><strong>Name:</strong> {application.name}</p>
+              <p><strong>Surname:</strong> {application.surname}</p>
+              <p><strong>Email:</strong> {application.email}</p>
+              <p><strong>Phone:</strong> {application.phone}</p>
+              
+            </Link>
           </li>
         ))}
       </ul>
-    
     </div>
   );
 };
