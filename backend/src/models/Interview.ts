@@ -30,7 +30,7 @@ export interface IInterview extends Document {
 
 const InterviewSchema: Schema = new Schema({
   title: { type: String, required: true },
-  totalCandidates: { type: Number, default: 0 },
+  totalCandidates: { type: Number, default: 1 },
   onHoldCandidates: { type: Number, default: 0 },
   isPublished: { type: Boolean, default: false },
   link: { type: String, required: false },
