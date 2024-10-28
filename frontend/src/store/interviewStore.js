@@ -4,6 +4,8 @@ const useInterviewStore = create((set) => ({
   interviews: [],
   applications: [],
   application: null,
+  totalApplications: 0,
+  nonPendingCount: 0,
   fetchInterviews: async () => {
     try {
       const response = await fetch('http://localhost:5555/api/interview');
@@ -92,11 +94,16 @@ const useInterviewStore = create((set) => ({
   },
   fetchApplications: async (link, interviewId) => {
     try {
-      console.log(`Fetching applications for interview ID: ${interviewId}`); // Debug log
+      console.log(`Fetching applications for interview ID: ${interviewId}`);
       const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`);
       const data = await response.json();
-      console.log('Fetched applications:', data); // Debug log
-      set({ applications: data });
+      console.log('Fetched applications ID and data', interviewId, data);
+      const nonPendingCount = data.filter((application) => application.status === "pending").length;
+      set({
+        applications: data,
+        totalApplications: data.length,
+        nonPendingCount: nonPendingCount,
+      });
     } catch (error) {
       console.error('Failed to fetch applications:', error);
     }

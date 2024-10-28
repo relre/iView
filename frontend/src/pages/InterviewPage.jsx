@@ -4,7 +4,7 @@ import useInterviewStore from '../store/interviewStore';
 import { PlusCircleIcon, TrashIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline';
 
 const InterviewPage = () => {
-  const { interviews, questionPackages, fetchInterviews, fetchQuestionPackages, addInterview, deleteInterview } = useInterviewStore();
+  const { interviews, questionPackages, fetchInterviews, fetchQuestionPackages, addInterview, deleteInterview, totalApplications, nonPendingCount } = useInterviewStore();
   const [newInterview, setNewInterview] = useState({
     title: '',
     isPublished: false,
@@ -122,7 +122,7 @@ const InterviewPage = () => {
             
             </div>
             <div>
-              <div className='text-2xl font-bold'>19</div>
+              <div className='text-2xl font-bold'>{totalApplications}</div>
               Total
             </div>
           </div>
@@ -131,7 +131,7 @@ const InterviewPage = () => {
             
             </div>
             <div>
-              <div className='text-2xl font-bold'>13</div>
+              <div className='text-2xl font-bold'>{nonPendingCount}</div>
               On Hold
             </div>
           </div>
