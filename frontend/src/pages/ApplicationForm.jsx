@@ -4,7 +4,7 @@ import useInterviewStore from '../store/interviewStore';
 
 const ApplicationForm = () => {
   const { link, id } = useParams();
-  const { addApplication, fetchInterviewQuestions, interviewQuestions } = useInterviewStore();
+  const { addApplication, fetchInterviewQuestions, fetchInterviewById, interviewQuestions } = useInterviewStore();
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
@@ -16,13 +16,15 @@ const ApplicationForm = () => {
   const [step, setStep] = useState(1);
   const [recording, setRecording] = useState(false);
   const [mediaStream, setMediaStream] = useState(null);
-  const mediaRecorderRef = useRef(null); // mediaRecorder nesnesini ref olarak sakla
+  const mediaRecorderRef = useRef(null);
   const [videoBlob, setVideoBlob] = useState(null);
   const [timer, setTimer] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [isPublished, setIsPublished] = useState(true);
+  const [isExpired, setIsExpired] = useState(false);
   const videoRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -30,8 +32,16 @@ const ApplicationForm = () => {
   const questionTimerRef = useRef(null);
 
   useEffect(() => {
-    fetchInterviewQuestions(id);
-  }, [fetchInterviewQuestions, id]);
+    const fetchInterview = async () => {
+      const interview = await fetchInterviewById(id);
+      if (interview) {
+        setIsPublished(interview.isPublished);
+        setIsExpired(new Date(interview.expireDate) < new Date());
+        fetchInterviewQuestions(id);
+      }
+    };
+    fetchInterview();
+  }, [fetchInterviewById, fetchInterviewQuestions, id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -95,9 +105,9 @@ const ApplicationForm = () => {
   };
 
   const startRecording = () => {
-    console.log('Starting recording...'); // Debug log
+    console.log('Starting recording...');
     const recorder = new MediaRecorder(mediaStream);
-    mediaRecorderRef.current = recorder; // mediaRecorder nesnesini ref'e ata
+    mediaRecorderRef.current = recorder;
     const chunks = [];
     recorder.ondataavailable = (e) => chunks.push(e.data);
     recorder.onstop = () => {
@@ -106,24 +116,24 @@ const ApplicationForm = () => {
       mediaStream.getTracks().forEach(track => track.stop());
     };
     recorder.start();
-    console.log('MediaRecorder state:', recorder.state); // Debug log
+    console.log('MediaRecorder state:', recorder.state);
     setRecording(true);
     startTimer();
     startQuestionTimer();
   };
 
   const stopRecording = () => {
-    console.log('Stopping recording...'); // Debug log
-    const recorder = mediaRecorderRef.current; // ref'ten mediaRecorder nesnesini al
+    console.log('Stopping recording...');
+    const recorder = mediaRecorderRef.current;
     if (recorder && recorder.state !== 'inactive') {
-      console.log('MediaRecorder state:', recorder.state); // Debug log
+      console.log('MediaRecorder state:', recorder.state);
       recorder.stop();
       setRecording(false);
       stopTimer();
       stopQuestionTimer();
       setShowSubmitButton(true);
     } else {
-      console.log('MediaRecorder is already inactive or not initialized.'); // Debug log
+      console.log('MediaRecorder is already inactive or not initialized.');
     }
   };
 
@@ -143,16 +153,16 @@ const ApplicationForm = () => {
     const showNextQuestion = () => {
       if (questionIndex < interviewQuestions.length) {
         setCurrentQuestion(interviewQuestions[questionIndex]);
-        const questionDuration = interviewQuestions[questionIndex].minutes * 1000; // Saniye olarak kullan
+        const questionDuration = interviewQuestions[questionIndex].minutes * 1000;
         questionTimerRef.current = setTimeout(() => {
           questionIndex++;
           showNextQuestion();
         }, questionDuration);
       } else {
         setCurrentQuestion(null);
-        console.log('All questions completed. Stopping recording...'); // Debug log
-        stopRecording(); // Tüm soruların süresi bittiğinde videoyu durdur
-        setShowSubmitButton(true); // Submit butonunu göster
+        console.log('All questions completed. Stopping recording...');
+        stopRecording();
+        setShowSubmitButton(true);
       }
     };
     showNextQuestion();
@@ -195,6 +205,10 @@ const ApplicationForm = () => {
     await response.json();
     return fileName;
   };
+
+  if (!isPublished || isExpired) {
+    return <p>Başvuru kabul edilememektedir.</p>;
+  }
 
   return (
     <div>

@@ -136,6 +136,19 @@ const useInterviewStore = create((set) => ({
       console.error('Failed to fetch application by ID:', error);
     }
   },
+  fetchInterviewById: async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch interview');
+      }
+      const interview = await response.json();
+      return interview;
+    } catch (error) {
+      console.error('Failed to fetch interview:', error);
+      return null;
+    }
+  },
   updateApplicationStatus: async (id, applicationId, status) => {
     try {
       const response = await fetch(`http://localhost:5555/api/interview/${id}/applications/${applicationId}`, {
