@@ -9,8 +9,23 @@ const useInterviewStore = create((set) => ({
   fetchInterviews: async () => {
     try {
       const response = await fetch('http://localhost:5555/api/interview');
-      const data = await response.json();
-      set({ interviews: data });
+      const interviews = await response.json();
+  
+      // Fetch applications for each interview and calculate totals
+      const updatedInterviews = await Promise.all(interviews.map(async (interview) => {
+        const appResponse = await fetch(`http://localhost:5555/api/interview/${interview._id}/applications`);
+        const applications = await appResponse.json();
+        const totalApplications = applications.length;
+        const nonPendingCount = applications.filter(app => app.status === 'pending').length;
+  
+        return {
+          ...interview,
+          totalApplications,
+          nonPendingCount,
+        };
+      }));
+  
+      set({ interviews: updatedInterviews });
     } catch (error) {
       console.error('Failed to fetch interviews:', error);
     }
