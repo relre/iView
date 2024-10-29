@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import logo from '../assets/iview-logo.png'; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -33,16 +34,18 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
-        <h1 className="text-2xl mb-4">Admin Login</h1>
+    
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 bg-transparent">
+      <img src={logo} className="max-w-[10rem]" alt="logo" />
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-1/3 border-2 mt-4 mb-4 border-rtwgreen">
+        <h1 className="text-2xl text-center font-bold text-rtwyellow mb-4"><span className='text-rtwgreen'>iView</span> Admin Login</h1>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-rtwgreen"
             required
           />
         </div>
@@ -52,11 +55,11 @@ const LoginPage = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-rtwgreen"
             required
           />
         </div>
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+        <button type="submit" className="w-full bg-rtwgreen hover:bg-rtwgreendark text-white p-2 rounded">
           Login
         </button>
       </form>
