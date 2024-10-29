@@ -77,15 +77,16 @@ const ApplicationsPage = () => {
   return (
     <div>
       <h1 className='text-4xl py-4 font-bold mb-4'>
-        Applications for Interview{' '}
+        
         {interviewsec && (
           <span className="text-4xl py-4 font-bold text-rtwgreen mb-4">
             {interviewsec.title}
           </span>
         )}
+        {' '}Interview
       </h1>
       <div className='flex space-x-5'>
-        <div className="mb-4 p-4 rounded shadow w-1/5 flex items-center green-gradient">
+        <div className="mb-4 p-4 rounded shadow w-1/4 flex items-center green-gradient">
           <div className="mr-4 flex items-center justify-center h-10 w-10 ">
             <ClipboardDocumentCheckIcon className="w-8 h-8 text-center text-rtwgreen " />
           </div>
@@ -94,13 +95,13 @@ const ApplicationsPage = () => {
             Total Applications
           </div>
         </div>
-        <div className="mb-4 p-4 rounded shadow w-1/5 flex items-center yellow-gradient">
+        <div className="mb-4 p-4 rounded shadow w-1/4 flex items-center yellow-gradient">
           <div className="mr-4 flex items-center justify-center h-10 w-10">
             <ClockIcon className="w-8 h-8 text-center text-rtwyellow " />
           </div>
           <div>
             <div className='text-2xl font-bold'>{nonPendingCount}</div>
-            Unexamined Application
+            Pending Applications
           </div>
         </div>
       </div>
