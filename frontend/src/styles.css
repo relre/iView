@@ -39,5 +39,7 @@ body {
 }
 
 .bg-transparent {
-  background: url('./assets/bg-transparent.png') ;
+    background: url('./assets/bg-transparent.png') no-repeat;
+    background-size: cover;
+    background-position-y: 125px;
 }

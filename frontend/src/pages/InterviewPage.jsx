@@ -121,7 +121,7 @@ const InterviewPage = () => {
               </div>
               <span className='text-sm'>Candidates:</span>
               <div className='flex space-x-2 mt-2'>
-                <div className="mb-2 p-2 rounded shadow w-1/4 flex items-center bg-rtwgreenligth2">
+                <div className="mb-2 p-2 rounded shadow w-2/5 flex items-center bg-rtwgreenligth2">
                   <div className="mr-2 flex items-center justify-center">
                   </div>
                   <div>
@@ -129,7 +129,7 @@ const InterviewPage = () => {
                     Total
                   </div>
                 </div>
-                <div className="mb-2 p-2 rounded shadow w-1/4 flex items-center bg-rtwgreenligth">
+                <div className="mb-2 p-2 rounded shadow w-2/5 flex items-center bg-rtwgreenligth">
                   <div className="mr-2 flex items-center justify-center">
                   </div>
                   <div>

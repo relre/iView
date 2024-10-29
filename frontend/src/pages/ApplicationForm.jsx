@@ -369,7 +369,19 @@ const ApplicationForm = () => {
                 </button> 
                 </div>
               ) : (
-                <div>aa</div>  
+                <div className="relative flex flex-col p-3">
+                  <span>Önemli Notlar</span>
+                  <ul className='list-disc text-start m-3'> 
+                    <li>Kameranızı ve mikrofonunuzu test edin.</li>
+                    <li>Kayıt başladığında ekranda sorular çıkacaktır.</li>
+                    <li>Sorulara verilen sürede cevap vermeniz beklenmektedir.</li>
+                    <li>Hazır olduğunuzda mülakat kaydını başlayabilirsiniz. </li>
+                  </ul>
+                  <span>   </span>
+                <button onClick={startRecording} className="bg-green-500 text-white px-4 py-2 rounded">
+                  Mülakat Kaydını Başlat
+                </button> 
+                </div> 
                 
               
               )}
