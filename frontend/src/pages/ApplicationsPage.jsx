@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
-import { ClockIcon, ClipboardDocumentCheckIcon, CalendarIcon, CheckIcon, XMarkIcon, QuestionMarkCircleIcon  } from '@heroicons/react/24/outline';
+import { ClockIcon, ClipboardDocumentCheckIcon, CalendarIcon, CheckIcon, XMarkIcon, QuestionMarkCircleIcon, PlayCircleIcon  } from '@heroicons/react/24/outline';
 
 const ApplicationsPage = () => {
   const { link, id } = useParams();
@@ -181,19 +181,37 @@ const ApplicationsPage = () => {
           </button>
         </div>
       </div>
-      <ul>
+
+      <div className="grid grid-cols-4 gap-4">
+      
         {filteredApplications.map((application) => (
-          <li key={application._id} className="mb-2 p-2 border border-gray-300 rounded">
+          <div key={application._id} className="p-4 bg-white mb-2 rounded shadow justify-between">
             <Link to={`/admin/interview/${id}/applications/${application._id}`}>
-              <p><strong>Name:</strong> {application.name}    {application.length}</p>
-              <p><strong>Surname:</strong> {application.surname}</p>
-              <p><strong>Email:</strong> {application.email}</p>
-              <p><strong>Phone:</strong> {application.phone}</p>
-              <p><strong>Status:</strong> {application.status}</p>
+              <div className='flex'><PlayCircleIcon className='w-6 h-6 text-rtwgreen mr-2' /> 
+              <p><strong>{application.name}  {' '}
+              <i>{application.surname}</i></strong> </p></div>
+              <p className='text-sm mt-2'><strong>Email:</strong> {application.email}</p>
+              <p className='text-sm mb-2'><strong>Phone:</strong> {application.phone}</p>
+              <p>
+              {application.status === 'approved' ? (
+                  <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                    Approved
+                  </span>
+                ) : application.status === 'rejected' ? (
+                  <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                    Rejected</span>
+
+                ) : (
+                  <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">Pending</span>
+            
+                )}
+                              
+               </p>
             </Link>
-          </li>
+          </div>
         ))}
-      </ul>
+    
+      </div>
      
       {isModalOpen && (
         <Modal onClose={handleModalClose}>
