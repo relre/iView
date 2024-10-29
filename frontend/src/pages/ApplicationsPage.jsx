@@ -189,7 +189,7 @@ const ApplicationsPage = () => {
             <Link to={`/admin/interview/${id}/applications/${application._id}`}>
               <div className='flex'><PlayCircleIcon className='w-6 h-6 text-rtwgreen mr-2' /> 
               <p><strong>{application.name}  {' '}
-              <i>{application.surname}</i></strong> </p></div>
+              <span className='text-rtwgreendark'>{application.surname}</span></strong> </p></div>
               <p className='text-sm mt-2'><strong>Email:</strong> {application.email}</p>
               <p className='text-sm mb-2'><strong>Phone:</strong> {application.phone}</p>
               <p>
