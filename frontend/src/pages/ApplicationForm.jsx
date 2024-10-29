@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
+import { ChevronDoubleRightIcon, CheckIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
 const ApplicationForm = () => {
@@ -26,18 +27,21 @@ const ApplicationForm = () => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isPublished, setIsPublished] = useState(true);
   const [isExpired, setIsExpired] = useState(false);
+  const [intName, setIntName] = useState(null);
   const videoRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const timerIntervalRef = useRef(null);
   const questionTimerRef = useRef(null);
 
+ 
   useEffect(() => {
     const fetchInterview = async () => {
       const interview = await fetchInterviewById(id);
       if (interview) {
         setIsPublished(interview.isPublished);
         setIsExpired(new Date(interview.expireDate) < new Date());
+        setIntName(interview.title);
         fetchInterviewQuestions(id);
       }
     };
@@ -215,16 +219,19 @@ const ApplicationForm = () => {
   }
 
   return (
-    <div className='green-gradient dd'>
+    <div className='bg-transparent'>
       
       {step === 1 ? (
-       <div className="flex justify-center items-center min-h-screen">
+       <div className="flex flex-col justify-center items-center min-h-screen">
 
-       <div className="p-3 rounded-lg shadow-xl bg-white">
+         <h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
+         <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2>
+       <div className="p-3 rounded-lg shadow-xl bg-white border-2 border-rtwgreen" >
        
 
-         <h2 className="mb-4">Mülakat Aday Bilgi Formu</h2>
-         <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
+         <h2 className=" text-center text-xl text-rtwgreen">Aday Bilgi Formu</h2>
+         
+         <form className="max-w-sm mx-auto p-6" onSubmit={handleSubmit}>
            <label className="block mb-2">
              İsim *
              <input
@@ -233,7 +240,7 @@ const ApplicationForm = () => {
                value={formData.name}
                onChange={handleChange}
                
-               className="w-full p-2 border border-gray-300 rounded mb-2"
+               className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:border-rtwgreen"
                required
              />
            </label>
@@ -244,7 +251,7 @@ const ApplicationForm = () => {
                name="surname"
                value={formData.surname}
                onChange={handleChange}
-               className="w-full p-2 border border-gray-300 rounded mb-2"
+               className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:border-rtwgreen"
                required
              />
            </label>
@@ -255,7 +262,7 @@ const ApplicationForm = () => {
                name="email"
                value={formData.email}
                onChange={handleChange}
-               className="w-full p-2 border border-gray-300 rounded mb-2"
+               className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:border-rtwgreen"
                required
              />
            </label>
@@ -267,22 +274,29 @@ const ApplicationForm = () => {
                value={formData.phone}
                onChange={handleChange}
                placeholder="+905555555555"
-               className="w-full p-2 border border-gray-300 rounded mb-2"
+               className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:border-rtwgreen"
                required
              />
            </label>
-           <label className="flex items-center mb-2">
+           <label className="flex items-center cursor-pointer mt-2">
+            <div className='relative'>
              <input
                type="checkbox"
                name="gdprConsent"
                checked={formData.gdprConsent}
                onChange={handleChange}
-               className="mr-2"
+               className="appearance-none h-5 w-5 border border-gray-300 rounded checked:bg-rtwgreen focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:ring-offset-2"
              /> 
-             GDPR politikasına onay veriyorum
+             </div>
+            <div className="absolute flex items-center justify-center">
+                      
+            </div>
+            <span className='text-xs ml-2 mb-2'> KVKK bilgilendirmesini okudum ve kişisel verilerimin işlenmesine izin veriyorum.</span>
+
            </label>
            {warningMessage && <p className="text-red-500 mb-4">{warningMessage}</p>}
-           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded w-full">
+           <button type="submit" className="bg-rtwgreen hover:bg-rtwgreendar text-white px-4 py-2 mt-3 rounded flex justify-center w-full">
+            <ChevronDoubleRightIcon className="h-5 w-5 mr-2 text-white text-sm" />
              Next
            </button>
          </form>
