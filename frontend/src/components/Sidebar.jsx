@@ -35,11 +35,11 @@ const Sidebar = () => {
       <div>
 
       <div className="h-64">
-        <div className='flex flex-col mb-12 justify-end bg-white rounded-lg shadow-xl py-4 m-5'>
-        <span className='text-center text-xs mb-2 text-gray-400'><strong>iView</strong> Beta v1.0</span>
+        <div className='flex flex-col mb-12 justify-end bg-white rounded-lg shadow-xl py-4 m-5 border border-rtwgreen'>
+        <span className='text-center text-xs mb-4 text-gray-400 '><strong>iView</strong> Beta v1.0</span>
       <span className="mx-auto mb-2">{email}</span>
-        <button onClick={handleLogout} className="border flex mx-auto p-2 w-1/2 rounded-md">
-        <ArrowRightEndOnRectangleIcon   className="h-6 w-6 mr-2 text-black ml-2" /> Logout
+        <button onClick={handleLogout} className="text-sm border flex mx-auto p-2 w-1/2 rounded-md">
+        <ArrowRightEndOnRectangleIcon   className="h-5 w-5 mr-2 text-black ml-2" /> Logout
         </button>
        
         </div>
