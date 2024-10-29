@@ -149,6 +149,37 @@ const useInterviewStore = create((set) => ({
       return null;
     }
   },
+  fetchSecondInterviewById: async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${id}`);
+      const data = await response.json();
+      console.log('Fetched interview:', data); // Log the fetched interview
+      set({ interviewsec: data });
+    } catch (error) {
+      console.error('Failed to fetch interview:', error);
+    }
+  },
+   updateInterview: async (id, updatedInterview) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedInterview),
+      });
+      const data = await response.json();
+      console.log('Updated interview:', data); // Log the updated interview
+      set((state) => ({
+        interviews: state.interviews.map((interview) =>
+          interview._id === id ? data : interview
+        ),
+        interview: data,
+      }));
+    } catch (error) {
+      console.error('Failed to update interview:', error);
+    }
+  },
   updateApplicationStatus: async (id, applicationId, status) => {
     try {
       const response = await fetch(`http://localhost:5555/api/interview/${id}/applications/${applicationId}`, {

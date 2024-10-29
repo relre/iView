@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
+import axios from 'axios';
 
 const ApplicationForm = () => {
   const { link, id } = useParams();
@@ -187,28 +188,27 @@ const ApplicationForm = () => {
     const randomId = generateRandomId();
     const fileName = `${randomId}.webm`;
     formData.append('file', blob, fileName);
-    
-    const response = await fetch('http://localhost:5555/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
   
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
+    try {
+      const response = await axios.post('http://localhost:5555/api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      if (response.status !== 200) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+  
+      if (!response.data) {
+        throw new Error('Server response is not JSON');
+      }
+  
+      return fileName;
+    } catch (error) {
+      throw new Error(`Failed to upload video: ${error.message}`);
     }
-  
-    const contentType = response.headers.get('Content-Type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Server response is not JSON');
-    }
-  
-    await response.json();
-    return fileName;
   };
-
-  if (!isPublished || isExpired) {
-    return <p>Başvuru kabul edilememektedir.</p>;
-  }
 
   return (
     <div>
