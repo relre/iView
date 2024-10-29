@@ -77,12 +77,11 @@ const ApplicationDetailPage = () => {
         Your browser does not support the video tag.
       </video>
       </div>
-      <div className='w-1/2 p-3'>
+      <div className='w-1/2 p-6'>
       <div>
-      <h2 className="text-xl font-bold mb-2 text-rtwgreen border-b w-1/3 border-rtwgreen">Application Detail</h2>
       <div className='flex items-center'><PlayCircleIcon className='w-6 h-6 text-rtwgreen mr-2' /> 
-              <p className='text-xl'><strong>{application.name}  {' '}
-              <span className='text-rtwgreendark'>{application.surname}</span></strong> </p></div>
+              <h2 className='text-2xl'><strong>{application.name}  {' '}
+              <span className='text-rtwgreendark'>{application.surname}</span></strong> </h2></div>
               <p className=' mt-2'><strong>Email:</strong> {application.email}</p>
               <p className=' mb-2'><strong>Phone:</strong> {application.phone}</p>
               <p>
