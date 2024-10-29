@@ -33,3 +33,11 @@ body {
   border-color:#29b3ac !important;
   box-shadow:0 0 0 1px #29b3ac !important;
 }
+
+.iview-bg {
+
+}
+
+.bg-transparent {
+  background: url('./assets/bg-transparent.png') ;
+}

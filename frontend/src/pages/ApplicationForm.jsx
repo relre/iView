@@ -215,58 +215,80 @@ const ApplicationForm = () => {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Application Form</h1>
+    <div className='green-gradient dd'>
+      
       {step === 1 ? (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Name"
-            className="w-full p-2 border border-gray-300 rounded mb-2"
-            required
-          />
-          <input
-            type="text"
-            name="surname"
-            value={formData.surname}
-            onChange={handleChange}
-            placeholder="Surname"
-            className="w-full p-2 border border-gray-300 rounded mb-2"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email"
-            className="w-full p-2 border border-gray-300 rounded mb-2"
-            required
-          />
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Phone"
-            className="w-full p-2 border border-gray-300 rounded mb-2"
-            required
-          />
-          <input
-            type="checkbox"
-            name="gdprConsent"
-            checked={formData.gdprConsent}
-            onChange={handleChange}
-            className="mb-2"
-          /> I consent to the GDPR policy
-          {warningMessage && <p className="text-red-500">{warningMessage}</p>}
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-            Next
-          </button>
-        </form>
+       <div className="flex justify-center items-center min-h-screen">
+
+       <div className="p-3 rounded-lg shadow-xl bg-white">
+       
+
+         <h2 className="mb-4">Mülakat Aday Bilgi Formu</h2>
+         <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
+           <label className="block mb-2">
+             İsim *
+             <input
+               type="text"
+               name="name"
+               value={formData.name}
+               onChange={handleChange}
+               
+               className="w-full p-2 border border-gray-300 rounded mb-2"
+               required
+             />
+           </label>
+           <label className="block mb-2">
+             Soyisim *
+             <input
+               type="text"
+               name="surname"
+               value={formData.surname}
+               onChange={handleChange}
+               className="w-full p-2 border border-gray-300 rounded mb-2"
+               required
+             />
+           </label>
+           <label className="block mb-2">
+             E-posta *
+             <input
+               type="email"
+               name="email"
+               value={formData.email}
+               onChange={handleChange}
+               className="w-full p-2 border border-gray-300 rounded mb-2"
+               required
+             />
+           </label>
+           <label className="block mb-2">
+             Telefon *
+             <input
+               type="text"
+               name="phone"
+               value={formData.phone}
+               onChange={handleChange}
+               placeholder="+905555555555"
+               className="w-full p-2 border border-gray-300 rounded mb-2"
+               required
+             />
+           </label>
+           <label className="flex items-center mb-2">
+             <input
+               type="checkbox"
+               name="gdprConsent"
+               checked={formData.gdprConsent}
+               onChange={handleChange}
+               className="mr-2"
+             /> 
+             GDPR politikasına onay veriyorum
+           </label>
+           {warningMessage && <p className="text-red-500 mb-4">{warningMessage}</p>}
+           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded w-full">
+             Next
+           </button>
+         </form>
+       </div>
+     </div>
+     
       ) : (
         <div>
           <h2 className="text-xl font-bold mb-4">Video Recording and Questions</h2>
