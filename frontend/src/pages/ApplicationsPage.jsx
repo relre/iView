@@ -111,7 +111,7 @@ const ApplicationsPage = () => {
           placeholder="Search applications..."
           value={searchQuery}
           onChange={handleSearchChange}
-          className="border border-gray-300 rounded p-2 w-full"
+          className="border border-gray-300 rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
         />
         <div className="mt-2">
           <button onClick={() => handleFilterChange('all')} className={`mr-2 p-2 rounded ${filterStatus === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>

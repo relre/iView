@@ -157,7 +157,7 @@ const InterviewPage = () => {
                 value={newInterview.title}
                 onChange={handleTitleChange}
                 placeholder="Title"
-                className="w-full p-2 border border-gray-300 rounded mb-2"
+                className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                 required
               />
               <div className="mb-4">
@@ -177,7 +177,7 @@ const InterviewPage = () => {
                 value={newInterview.expireDate}
                 onChange={(e) => setNewInterview({ ...newInterview, expireDate: e.target.value })}
                 placeholder="Expire Date"
-                className="w-full p-2 border border-gray-300 rounded mb-2"
+                className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                 required
               />
               <label className="flex items-center cursor-pointer mt-2">

@@ -114,7 +114,7 @@ const QuestionPackagePage = () => {
 
       {showAddModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/4">
             <h2 className="text-xl mb-4">Add New Package</h2>
             <form onSubmit={handleAddTitle}>
               <input
@@ -122,7 +122,7 @@ const QuestionPackagePage = () => {
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="New Title"
-                className="w-full p-2 border border-gray-300 rounded mb-4"
+                className="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent  "
                 required
               />
               <div className="flex justify-end space-x-4">
@@ -144,7 +144,7 @@ const QuestionPackagePage = () => {
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
                 placeholder="Edit Title"
-                className="w-full p-2 border border-gray-300 rounded mb-4"
+                className="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                 required
               />
               <div className="flex justify-end space-x-4">

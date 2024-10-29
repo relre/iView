@@ -181,7 +181,7 @@ const QuestionListPage = () => {
                   value={newQuestion.text}
                   onChange={(e) => setNewQuestion({ ...newQuestion, text: e.target.value })}
                   placeholder="New Question Text"
-                  className="w-full p-2 border border-gray-300 rounded mb-2"
+                  className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
                 />
                 <input
@@ -189,7 +189,7 @@ const QuestionListPage = () => {
                   value={newQuestion.minutes}
                   onChange={(e) => setNewQuestion({ ...newQuestion, minutes: parseInt(e.target.value) })}
                   placeholder="Minutes"
-                  className="w-full p-2 border border-gray-300 rounded mb-2"
+                  className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
                 />
                 <div className="flex justify-end space-x-4">
@@ -213,7 +213,7 @@ const QuestionListPage = () => {
                   value={editQuestion.text || ''}
                   onChange={(e) => setEditQuestion({ ...editQuestion, text: e.target.value })}
                   placeholder="Edit Question Text"
-                  className="w-full p-2 border border-gray-300 rounded mb-2"
+                  className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
                 />
                 <input
@@ -221,7 +221,7 @@ const QuestionListPage = () => {
                   value={editQuestion.minutes || 0}
                   onChange={(e) => setEditQuestion({ ...editQuestion, minutes: parseInt(e.target.value) })}
                   placeholder="Minutes"
-                  className="w-full p-2 border border-gray-300 rounded mb-2"
+                  className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
                 />
                 <div className="flex justify-end space-x-4">
