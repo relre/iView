@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
-import { ChevronDoubleRightIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { ChevronDoubleRightIcon, CheckIcon, MicrophoneIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
 const ApplicationForm = () => {
@@ -83,7 +83,14 @@ const ApplicationForm = () => {
 
   const requestCameraPermissions = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const constraints = {
+        video: {
+          width: window.innerWidth < 800 ? { ideal: 450 } : { ideal: 1280 }, // Ekran genişliği 800px'den küçükse 640, değilse 1280
+          height: window.innerWidth < 800 ? { ideal: 720 } : { ideal: 720 }  // Ekran genişliği 800px'den küçükse 480, değilse 720
+        },
+        audio: true
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       setMediaStream(stream);
       videoRef.current.srcObject = stream;
 
@@ -219,9 +226,10 @@ const ApplicationForm = () => {
   }
 
   return (
-    <div className='bg-transparent'>
+    <div className='bg-white'>
       
       {step === 1 ? (
+        <div className='bg-transparent'>
        <div className="flex flex-col justify-center items-center min-h-screen">
 
          <h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
@@ -297,19 +305,31 @@ const ApplicationForm = () => {
            {warningMessage && <p className="text-red-500 mb-4">{warningMessage}</p>}
            <button type="submit" className="bg-rtwgreen hover:bg-rtwgreendar text-white px-4 py-2 mt-3 rounded flex justify-center w-full">
             <ChevronDoubleRightIcon className="h-5 w-5 mr-2 text-white text-sm" />
-             Next
+             Video Mülakatına Geç
            </button>
          </form>
        </div>
-     </div>
+     </div></div>
      
       ) : (
-        <div>
-          <h2 className="text-xl font-bold mb-4">Video Recording and Questions</h2>
+        <div className='text-center'>
+            
+            <div className={`flex flex-col justify-center items-center min-h-screen`}>
+               <div className={`${window.innerWidth < 800 && mediaStream ? 'hidden' : ''}`}><h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
+               <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2></div>
+         
           {!showSubmitButton && (
             <>
               <div className="relative">
-                <video ref={videoRef} autoPlay muted className="w-half mb-4"></video>
+                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
+                {window.innerWidth < 800 &&(
+                <div className='absolute top-0 left-10 w-1/4 flex items-center'>
+                <MicrophoneIcon className='h-6 w-6 text-white '/>
+                  <div className="bg-gray-500 w-full h-2 rounded">
+                  <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
+                  </div>
+                </div>
+                )}
                 {recording && (
                   <div className="absolute top-0 left-0 bg-black text-white p-1 text-xs">
                     {formatTime(timer)}
@@ -322,23 +342,38 @@ const ApplicationForm = () => {
                 )}
               </div>
               {!mediaStream ? (
+                <div className='flex flex-col'>
+                 <span>Hoşgeldiniz.</span> 
+                 
                 <button onClick={requestCameraPermissions} className="bg-blue-500 text-white px-4 py-2 rounded">
-                  Open Camera
+                  Kamerayı ve Mikronu Açın
                 </button>
+
+                <span className='text-sm mt-2 text-gray-500'>Video mülakatı başlatmak için kamera ve mikrofon izni vermelisiniz.</span>
+                </div>
               ) : recording ? (
                 <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 rounded">
-                  Stop Recording
                 </button>
-              ) : (
+              ) : window.innerWidth < 800 ? (
+                 <div className="relative flex flex-col p-3">
+                  <span>Önemli Notlar</span>
+                  <ul className='list-disc text-start m-3'> 
+                    <li>Kameranızı ve mikrofonunuzu test edin.</li>
+                    <li>Kayıt başladığında ekranda sorular çıkacaktır.</li>
+                    <li>Sorulara verilen sürede cevap vermeniz beklenmektedir.</li>
+                    <li>Hazır olduğunuzda mülakat kaydını başlayabilirsiniz. </li>
+                  </ul>
+                  <span>   </span>
                 <button onClick={startRecording} className="bg-green-500 text-white px-4 py-2 rounded">
-                  Start Recording
-                </button>
-              )}
-              <div className="mt-4">
-                <div className="bg-gray-200 w-1/6 h-2 rounded">
-                  <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
+                  Mülakat Kaydını Başlat
+                </button> 
                 </div>
-              </div>
+              ) : (
+                <div>aa</div>  
+                
+              
+              )}
+              
             </>
           )}
           {showSubmitButton && (
@@ -347,6 +382,7 @@ const ApplicationForm = () => {
             </button>
           )}
           {warningMessage && <p className="text-red-500">{warningMessage}</p>}
+          </div>
         </div>
       )}
     </div>
