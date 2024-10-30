@@ -338,25 +338,25 @@ const ApplicationForm = () => {
           {!showSubmitButton && (
             <>
               
-              <div className="relative md:flex md:justify-center">
-                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen md:w-1/2 mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
-                {window.innerWidth < 800 &&(
-                <div className='absolute top-5 left-10 w-1/4 flex items-center'>
-                <MicrophoneIcon className='h-6 w-6 text-white '/>
+              <div className="relative md:flex md:justify-start">
+                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
+                
+                <div className='absolute top-5 left-10 sm:top-14   w-1/4 sm:w-1/6 flex items-center'>
+                <MicrophoneIcon className='h-6 w-6 text-white sm:text-green-600'/>
                   <div className="bg-gray-500 w-full h-2 rounded">
                   <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
                   </div>
                 </div>
-                )}
+                
                 {recording && (
-                  <div className="absolute top-0 left-[45%] rigth-0 bg-black text-white p-2 text-xs rounded-lg">
+                  <div className="absolute top-0 left-[45%] sm:top-10 rigth-0 bg-black text-white p-2 text-xs rounded-lg">
                     {formatTime(timer)}
                   </div>
                 )}
                 {currentQuestion &&  (
-                  <div className="bg-white text-black p-2 flex-col mt-[-100px]">
+                  <div className="bg-white text-black p-2 flex-col mt-[-100px] sm:mt-8 sm:ml-5 sm:w-full sm:text-start">
                     <span className="bg-gray-200 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">
-                    {formatTime(questionTimeLeft)}  </span> <p className='mt-2'>{currentQuestion.text}</p> 
+                    {formatTime(questionTimeLeft)}  </span> <p className='mt-2 sm:text-3xl sm:font-bold sm:text-rtwgreen'>{currentQuestion.text}</p> 
                   </div>
               
                 )}
