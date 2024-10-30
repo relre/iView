@@ -249,7 +249,7 @@ const ApplicationsPage = () => {
 const Modal = ({ children, onClose }) => {
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/2 max-h-full overflow-y-auto">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-2/3 max-h-full overflow-y-auto">
         <button onClick={onClose} className="float-right text-gray-500">Close</button>
         {children}
       </div>
