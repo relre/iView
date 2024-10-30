@@ -35,6 +35,7 @@ const ApplicationForm = () => {
   const questionTimerRef = useRef(null);
   const [questionTimeLeft, setQuestionTimeLeft] = useState(0); // New state for countdown timer
   const [submitForm, setSubmitForm] = useState(false);
+  const [submit4Form, setSubmit4Form] = useState(false);
 
   useEffect(() => {
     const fetchInterview = async () => {
@@ -95,7 +96,7 @@ const ApplicationForm = () => {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       setMediaStream(stream);
       videoRef.current.srcObject = stream;
-
+      setSubmit4Form(true);
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContextRef.current.createMediaStreamSource(stream);
       analyserRef.current = audioContextRef.current.createAnalyser();
@@ -336,8 +337,9 @@ const ApplicationForm = () => {
          
           {!showSubmitButton && (
             <>
-              <div className="relative">
-                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
+              
+              <div className="relative md:flex md:justify-center">
+                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen md:w-1/2 mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
                 {window.innerWidth < 800 &&(
                 <div className='absolute top-5 left-10 w-1/4 flex items-center'>
                 <MicrophoneIcon className='h-6 w-6 text-white '/>
@@ -359,52 +361,55 @@ const ApplicationForm = () => {
               
                 )}
               </div>
+             
+          
+              
               {!mediaStream ? (
-                <div className='flex flex-col'>
-                  <div className='border-2 border-rtwgreen p-3 m-3 rounded-lg'>
+                <div className='flex flex-col md:items-center'>
+                  <div className='border-2 border-rtwgreen p-3 m-3 rounded-lg md:w-1/2'>
                   <h4 className='text-rtwgreen text-3xl font-bold'>4 ADIMDA</h4>
                   <h4 className='text-rtwgreen text-3xl font-bold text-rtwyellow'>VİDEO MÜLAKAT</h4>
                   <h4 className='text-rtwgreen text-3xl font-bold'>NASIL YAPILIR?</h4>
                   </div>
                 
-<ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse p-5">
-    <li class="flex items-center justify-center text-rtwgreen space-x-2.5 rtl:space-x-reverse">
-        <span class="flex items-center justify-center w-8 h-8 border border-rtwgreen rounded-full shrink-0 ">
-            1
-        </span>
-        <span>
-            <h3 class="text-start font-medium leading-tight">Kamera ve Mikrofonunuzu Açın</h3>
-            <p class="text-start text-sm">Video mülakata başlamak için bu adımda kamera ve video izni vermelisiniz.</p>
-        </span>
-    </li>
-    <li class="flex items-center justify-center  space-x-2.5 rtl:space-x-reverse">
-        <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
-            2
-        </span>
-        <span>
-            <h3 class="text-start font-medium leading-tight">Mülakata Başlayın</h3>
-            <p class="text-start text-sm">Kamera ve mikrofonunuzu kontrol ettikten sonra mülakata başlayın.</p>
-        </span>
-    </li>
-    <li class="flex items-center justify-center space-x-2.5 rtl:space-x-reverse">
-        <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
-            3
-        </span>
-        <span>
-            <h3 class="text-start font-medium leading-tight">Soruları Cevaplayın</h3>
-            <p class="text-start text-sm">Karşınıza çıkan soruları geri sayımda belirtilen süre içinde cevaplayın.</p>
-        </span>
-    </li>
-    <li class="flex items-center justify-center space-x-2.5 rtl:space-x-reverse">
-        <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
-            3
-        </span>
-        <span>
-            <h3 class="text-start font-medium leading-tight">Mülakatı Gönderin</h3>
-            <p class="text-start text-sm">Tüm sorular bittiğinde "Mülakat Başvurusunu Gönder" seçeneğine tıklayarak gönderin.</p>
-        </span>
-    </li>
-</ol>
+                            <ol className="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse p-5">
+                                <li className="flex items-center justify-center text-rtwgreen space-x-2.5 rtl:space-x-reverse">
+                                    <span className="flex items-center justify-center w-8 h-8 border border-rtwgreen rounded-full shrink-0 ">
+                                        1
+                                    </span>
+                                    <span>
+                                        <h3 className="text-start font-medium leading-tight">Kamera ve Mikrofonunuzu Açın</h3>
+                                        <p className="text-start text-sm">Video mülakata başlamak için bu adımda kamera ve video izni vermelisiniz.</p>
+                                    </span>
+                                </li>
+                                <li className="flex items-center justify-center  space-x-2.5 rtl:space-x-reverse">
+                                    <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                                        2
+                                    </span>
+                                    <span>
+                                        <h3 className="text-start font-medium leading-tight">Mülakata Başlayın</h3>
+                                        <p className="text-start text-sm">Kamera ve mikrofonunuzu kontrol ettikten sonra mülakata başlayın.</p>
+                                    </span>
+                                </li>
+                                <li className="flex items-center justify-center space-x-2.5 rtl:space-x-reverse">
+                                    <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                                        3
+                                    </span>
+                                    <span>
+                                        <h3 className="text-start font-medium leading-tight">Soruları Cevaplayın</h3>
+                                        <p className="text-start text-sm">Karşınıza çıkan soruları geri sayımda belirtilen süre içinde cevaplayın.</p>
+                                    </span>
+                                </li>
+                                <li className="flex items-center justify-center space-x-2.5 rtl:space-x-reverse">
+                                    <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                                        3
+                                    </span>
+                                    <span>
+                                        <h3 className="text-start font-medium leading-tight">Mülakatı Gönderin</h3>
+                                        <p className="text-start text-sm">Tüm sorular bittiğinde "Mülakat Başvurusunu Gönder" seçeneğine tıklayarak gönderin.</p>
+                                    </span>
+                                </li>
+                            </ol>
 
 
                  
@@ -418,7 +423,8 @@ const ApplicationForm = () => {
                 <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
                   Mülakatı Bitir
                 </button>
-              ) : window.innerWidth < 800 ? (
+              ) : (
+                <div>
                  <div className="relative flex flex-col p-3 mt-[-100px]">
                   <span className='text-rtwgreen'>Önemli Notlar</span>
                   <ul className='list-none text-start m-3 text-sm'> 
@@ -432,22 +438,10 @@ const ApplicationForm = () => {
                  <VideoCameraIcon className='h-5 h6 mr-2 ' /> Mülakat Kaydını Başlat
                 </button> 
                 </div>
-              ) : (
-                <div className="relative flex flex-col p-3">
-                  <span>Önemli Notlar</span>
-                  <ul className='list-disc text-start m-3'> 
-                    <li className='text-xs'>Kameranızı ve mikrofonunuzu test edin.</li>
-                    <li>Kayıt başladığında ekranda sorular çıkacaktır.</li>
-                    <li>Sorulara verilen sürede cevap vermeniz beklenmektedir.</li>
-                    <li>Hazır olduğunuzda mülakat kaydını başlayabilirsiniz. </li>
-                  </ul>
-                  <span>   </span>
-                <button onClick={startRecording} className="bg-rtwgreen hover:bg-rtwgreendark px-4 py-2 rounded">
-                  Mülakat Kaydını Başlat
-                </button> 
-                </div> 
+             
                 
-              
+                
+                </div>
               )}
               
             </>
