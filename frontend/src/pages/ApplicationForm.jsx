@@ -233,7 +233,12 @@ const ApplicationForm = () => {
   };
 
   if (!isPublished || isExpired) {
-    return <p>Başvuru kabul edilememektedir.</p>;
+    return <div className='bg-transparent'>
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <h1 className='text-2xl md:text-3xl text-rtwgreen text-gr'>Başvuru kabul edilmemektedir. </h1>
+        <h2 className='text-xl md:text-2xl text-rtwyellow font-bold text-gr'>İlginiz için teşekkür ederiz. </h2>
+      </div>
+    </div>
   }
 
   return (
