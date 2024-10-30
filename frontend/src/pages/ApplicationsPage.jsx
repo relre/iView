@@ -117,7 +117,7 @@ const ApplicationsPage = () => {
               onChange={handleExpireDateChange}
               className="border border-gray-300 rounded p-1"
             />{showSaveButton && (
-              <button onClick={handleExpireDateSave} className="bg-rtwgreen hover:bg-rtwgreendark text-sm text-white px-4 py-2 ml-2 rounded-lg">
+              <button onClick={handleExpireDateSave} className="bg-rtwgreen hover:bg-rtwgreendark text-xs text-white px-2 py-2 ml-2 rounded-lg">
                 {saveButtonText}
               </button>
             )}
