@@ -330,7 +330,19 @@ const ApplicationForm = () => {
      
       ) : (
         <div className='text-center'>
-            
+            <div className="container mx-auto p-4">
+  <div className="flex flex-col md:flex-row">
+    <div className="flex-1 bg-blue-500 p-4">
+      <h2 className="text-white">Birinci Sütun</h2>
+      <p className="text-white">Bu alan birinci sütun içeriği.</p>
+    </div>
+    <div className="flex-1 bg-green-500 p-4 mt-4 md:mt-0 md:ml-4">
+      <h2 className="text-white">İkinci Sütun</h2>
+      <p className="text-white">Bu alan ikinci sütun içeriği.</p>
+    </div>
+  </div>
+</div>
+
             <div className={`flex flex-col justify-center items-center min-h-screen`}>
                <div className={`${window.innerWidth < 800 && mediaStream ? 'hidden' : ''}`}><h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
                <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2></div>
