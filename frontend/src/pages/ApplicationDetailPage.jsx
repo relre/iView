@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import useInterviewStore from '../store/interviewStore';
 import { PlayCircleIcon } from '@heroicons/react/24/outline';
@@ -12,6 +12,14 @@ const ApplicationDetailPage = () => {
   const fetchInterviewQuestions = useInterviewStore((state) => state.fetchInterviewQuestions);
   const interviewQuestions = useInterviewStore((state) => state.interviewQuestions); // interviewQuestions state'ini al
   const [status, setStatus] = useState('');
+  const videoRef = useRef(null);
+
+  const startVideoAt = (seconds) => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = seconds;
+      videoRef.current.play();
+    }
+  };
 
   useEffect(() => {
     fetchApplicationById(id, applicationId);
@@ -72,10 +80,23 @@ const ApplicationDetailPage = () => {
 
       <div className='flex p-6 rounded-lg bg-white shadow-lg'>
         <div className='w-1/2 p-3'>
-      <video className='w-full rounded-lg' controls>
+      <video ref={videoRef} className='w-full rounded-lg' controls>
         <source src={videoUrl}/>
         Your browser does not support the video tag.
       </video>
+      <button 
+            onClick={() => startVideoAt(5)} 
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Start Video at 5s
+          </button>
+
+          <button 
+            onClick={() => startVideoAt(2)} 
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Start Video at 2s
+          </button>
       </div>
       <div className='w-1/2 p-6'>
       <div>

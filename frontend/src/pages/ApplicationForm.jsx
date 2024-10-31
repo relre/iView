@@ -339,7 +339,7 @@ const ApplicationForm = () => {
             <>
               
               <div className="relative md:flex md:justify-start">
-                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
+                <video ref={videoRef} muted autoPlay className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
                 
                 <div className='absolute top-5 left-10 sm:top-14   w-1/4 sm:w-1/6 flex items-center'>
                 <MicrophoneIcon className='h-6 w-6 text-white sm:text-green-600'/>
