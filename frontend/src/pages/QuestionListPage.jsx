@@ -10,9 +10,9 @@ const QuestionListPage = () => {
   const { id } = useParams();
   const { questionPackages, fetchQuestionPackages, addQuestion, updateQuestion, deleteQuestion } = useQuestionPackageStore();
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [newQuestion, setNewQuestion] = useState({ text: '', minutes: 0, order: 0 });
+  const [newQuestion, setNewQuestion] = useState({ text: '', minutes: 0, seconds: 0, order: 0 });
   const [editQuestionId, setEditQuestionId] = useState(null);
-  const [editQuestion, setEditQuestion] = useState({ text: '', minutes: 0, order: 0 });
+  const [editQuestion, setEditQuestion] = useState({ text: '', minutes: 0, seconds: 0, order: 0 });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -35,7 +35,7 @@ const QuestionListPage = () => {
     try {
       const order = selectedPackage.questions.length;
       await addQuestion(selectedPackage._id, { ...newQuestion, order });
-      setNewQuestion({ text: '', minutes: 0, order: 0 });
+      setNewQuestion({ text: '', minutes: 0, seconds: 0, order: 0 });
       fetchQuestionPackages();
     } catch (error) {
       console.error('Failed to add question:', error);
@@ -51,7 +51,7 @@ const QuestionListPage = () => {
       try {
         await updateQuestion(selectedPackage._id, editQuestionId, editQuestion);
         setEditQuestionId(null);
-        setEditQuestion({ text: '', minutes: 0, order: 0 });
+        setEditQuestion({ text: '', minutes: 0, seconds: 0, order: 0 });
         fetchQuestionPackages();
       } catch (error) {
         console.error('Failed to update question:', error);
@@ -114,7 +114,11 @@ const QuestionListPage = () => {
 
   if (!selectedPackage) return <div>Loading...</div>;
 
-  const totalMinutes = selectedPackage.questions.reduce((sum, question) => sum + question.minutes, 0);
+  const totalSeconds = selectedPackage.questions.reduce((sum, question) => sum + (question.minutes * 60) + question.seconds, 0);
+const totalMinutes = Math.floor(totalSeconds / 60);
+const remainingSeconds = totalSeconds % 60;
+const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format string oluşturma
+
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -127,8 +131,8 @@ const QuestionListPage = () => {
               <QuestionMarkCircleIcon className="w-8 h-8 text-center text-rtwgreen " />
             </div>
             <div>
-              <div className='text-2xl font-bold'>{selectedPackage.questions.length}</div>
-              Total Questions
+            <div className='text-2xl font-bold'>{formattedTotalTime}</div>
+            Total Time
             </div>
           </div>
 
@@ -137,8 +141,8 @@ const QuestionListPage = () => {
               <ClockIcon className="w-8 h-8 text-center text-rtwyellow " />
             </div>
             <div>
-              <div className='text-2xl font-bold'>{totalMinutes}</div>
-              Total Minutes
+              <div className='text-2xl font-bold'>{totalMinutes}m {remainingSeconds}s</div>
+              Total Time
             </div>
           </div>
         </div>
@@ -192,6 +196,14 @@ const QuestionListPage = () => {
                   className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
                 />
+                <input
+                  type="number"
+                  value={newQuestion.seconds}
+                  onChange={(e) => setNewQuestion({ ...newQuestion, seconds: parseInt(e.target.value) })}
+                  placeholder="Seconds"
+                  className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
+                  required
+                />
                 <div className="flex justify-end space-x-4">
                   <button onClick={() => setShowAddModal(false)} className="bg-white hover:bg-gray-100 text-sm text-black border px-4 py-2 rounded-lg">Cancel</button>
                   <button type="submit" className="bg-rtwgreen hover:bg-rtwgreendark text-sm text-white px-4 py-2 rounded-lg" disabled={isSubmitting}>
@@ -221,6 +233,14 @@ const QuestionListPage = () => {
                   value={editQuestion.minutes || 0}
                   onChange={(e) => setEditQuestion({ ...editQuestion, minutes: parseInt(e.target.value) })}
                   placeholder="Minutes"
+                  className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
+                  required
+                />
+                <input
+                  type="number"
+                  value={editQuestion.seconds || 0}
+                  onChange={(e) => setEditQuestion({ ...editQuestion, seconds: parseInt(e.target.value) })}
+                  placeholder="Seconds"
                   className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
                 />
@@ -294,7 +314,7 @@ const Question = ({ question, index, moveQuestion, openEditQuestionForm, openDel
         {question.text || 'No text available'}
       </td>
       <td className="py-2 px-4 border-t border-b text-end">
-        <button className="px-2 py-1 rounded text-[0.9rem] text-yellow-500 bg-yellow-100 mr-2"><strong>{question.minutes}</strong> minutes</button>
+        <button className="px-2 py-1 rounded text-[0.9rem] text-yellow-500 bg-yellow-100 mr-2"><strong>{question.minutes}</strong> minutes <strong>{question.seconds}</strong> seconds</button>
       </td>
       <td className="py-2 px-4 border-r border-t border-b rounded-r-lg text-end flex justify-end space-x-2">
         <button onClick={() => openEditQuestionForm(question)} className="px-2 py-1 rounded flex items-center mr-2 hover:text-rtwgreen"><PencilSquareIcon className="h-6 w-6 mr-1" />Edit</button>
@@ -304,4 +324,4 @@ const Question = ({ question, index, moveQuestion, openEditQuestionForm, openDel
   );
 };
 
-export default QuestionListPage;
+export default QuestionListPage;303

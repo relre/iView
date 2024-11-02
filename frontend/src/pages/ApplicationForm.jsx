@@ -36,6 +36,11 @@ const ApplicationForm = () => {
   const [questionTimeLeft, setQuestionTimeLeft] = useState(0); // New state for countdown timer
   const [submitForm, setSubmitForm] = useState(false);
   const [submit4Form, setSubmit4Form] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Track the current question index
+  const [totalQuestions, setTotalQuestions] = useState(0);
+
+
+
 
   useEffect(() => {
     const fetchInterview = async () => {
@@ -44,11 +49,13 @@ const ApplicationForm = () => {
         setIsPublished(interview.isPublished);
         setIsExpired(new Date(interview.expireDate) < new Date());
         setIntName(interview.title);
-        fetchInterviewQuestions(id);
+        await fetchInterviewQuestions(id);
+        setTotalQuestions(interviewQuestions.length); // Toplam soruları ayarla
       }
     };
     fetchInterview();
   }, [fetchInterviewById, fetchInterviewQuestions, id]);
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -233,6 +240,18 @@ const ApplicationForm = () => {
     }
   };
 
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < interviewQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestion(interviewQuestions[currentQuestionIndex + 1]);
+      const questionDuration = interviewQuestions[currentQuestionIndex + 1].minutes * 60;
+      setQuestionTimeLeft(questionDuration);
+    } else {
+      stopRecording();
+      setShowSubmitButton(true);
+    }
+  };
+  
   if (!isPublished || isExpired) {
     return <div className='bg-transparent'>
       <div className="flex flex-col justify-center items-center min-h-screen">
@@ -243,7 +262,11 @@ const ApplicationForm = () => {
   }
 
   return (
+    
+    
     <div className='bg-white'>
+      
+      
       
       {step === 1 ? (
         <div className='bg-transparent'>
@@ -420,11 +443,17 @@ const ApplicationForm = () => {
                 <span className='text-sm mt-2 text-gray-500'>* Video mülakatı başlatmak için kamera ve mikrofon izni vermelisiniz.</span>
                 </div>
               ) : recording ? (
-                <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
-                  Mülakatı Bitir
-                </button>
+                <div>
+                  <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
+                    Mülakatı Bitir
+                  </button>
+                  <button onClick={handleNextQuestion} className="bg-blue-500 text-white px-4 py-2 mt-4 ml-4 rounded">
+                    Sonraki Soru
+                  </button>
+                </div>
               ) : (
                 <div>
+                  
                  <div className="relative flex flex-col p-3 mt-[-100px]">
                   <span className='text-rtwgreen'>Önemli Notlar</span>
                   <ul className='list-none text-start m-3 text-sm'> 
@@ -447,8 +476,11 @@ const ApplicationForm = () => {
             </>
           )}
           {showSubmitButton && (
+            
             <div className={`flex flex-col ${ submitForm ? 'hidden' : ' '}`}>
+              
               <span className='text-2xl font-bold text-rtwyellow'>Son bir adım kaldı...</span>
+              
             <button onClick={handleSubmit} className="bg-rtwgreen hover:bg-rtwgreendark text-white px-4 py-2 rounded mt-4">
               Mülakat Başvurusunu Gönder
             </button>
@@ -463,6 +495,7 @@ const ApplicationForm = () => {
         </div>
       )}
     </div>
+    
   );
 };
 

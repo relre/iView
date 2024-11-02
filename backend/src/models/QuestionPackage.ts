@@ -4,6 +4,7 @@ export interface IQuestion extends Document {
   _id: Types.ObjectId;
   text: string;
   minutes: number;
+  seconds: number;
   order: number;
 }
 
@@ -16,6 +17,7 @@ const QuestionSchema = new Schema<IQuestion>({
   _id: { type: Schema.Types.ObjectId, auto: true },
   text: { type: String, required: true },
   minutes: { type: Number, required: true },
+  seconds: { type: Number, required: true, default: 0 },
   order: { type: Number, required: true }
 });
 

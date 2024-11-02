@@ -1,15 +1,30 @@
 import { Request, Response } from 'express';
 import QuestionPackage from '../models/QuestionPackage';
 
+// Tüm soru paketlerini getir
 export const getAllQuestionPackages = async (req: Request, res: Response) => {
   try {
     const questionPackages = await QuestionPackage.find();
-    res.json(questionPackages);
+    
+    const questionPackagesWithTotalTime = questionPackages.map(pkg => {
+      const totalSeconds = pkg.questions.reduce((acc, question) => acc + (question.minutes * 60) + question.seconds, 0);
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const remainingSeconds = totalSeconds % 60;
+      
+      return {
+        ...pkg.toObject(),
+        totalTime: `${totalMinutes}m ${remainingSeconds}s`, // Toplam süreyi dakika ve saniye olarak birleştiriyoruz
+        totalMinutes: totalMinutes + (remainingSeconds > 0 ? 1 : 0) // Toplam dakikayı hesapla
+      };
+    });
+
+    res.json(questionPackagesWithTotalTime);
   } catch (error) {
     res.status(500).json({ message: (error as Error).message });
   }
 };
 
+// Yeni bir soru paketi oluştur
 export const createQuestionPackage = async (req: Request, res: Response) => {
   const { title } = req.body;
   try {
@@ -21,6 +36,7 @@ export const createQuestionPackage = async (req: Request, res: Response) => {
   }
 };
 
+// Soru paketini güncelle
 export const updateQuestionPackage = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -35,6 +51,7 @@ export const updateQuestionPackage = async (req: Request, res: Response) => {
   }
 };
 
+// Soru paketini sil
 export const deleteQuestionPackage = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -48,6 +65,7 @@ export const deleteQuestionPackage = async (req: Request, res: Response) => {
   }
 };
 
+// Soru paketine ait soruları getir
 export const getQuestionsByPackageId = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -61,15 +79,16 @@ export const getQuestionsByPackageId = async (req: Request, res: Response) => {
   }
 };
 
+// Soru paketine yeni bir soru ekle
 export const addQuestionToPackage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { text, minutes, order } = req.body;
+  const { text, minutes, seconds, order } = req.body;
   try {
     const questionPackage = await QuestionPackage.findById(id);
     if (!questionPackage) {
       return res.status(404).json({ message: 'Question package not found' });
     }
-    questionPackage.questions.push({ text, minutes, order });
+    questionPackage.questions.push({ text, minutes, seconds, order });
     await questionPackage.save();
     res.json(questionPackage);
   } catch (error) {
@@ -77,6 +96,7 @@ export const addQuestionToPackage = async (req: Request, res: Response) => {
   }
 };
 
+// Soru sırasını güncelle
 export const updateQuestionOrder = async (req: Request, res: Response) => {
   const { id } = req.params; // Soru paketi ID'si
   const { questions } = req.body; // Güncellenen soruların dizisi
@@ -96,9 +116,10 @@ export const updateQuestionOrder = async (req: Request, res: Response) => {
   }
 };
 
+// Soru paketindeki bir soruyu güncelle
 export const updateQuestionInPackage = async (req: Request, res: Response) => {
   const { id, questionId } = req.params;
-  const { text, minutes, order } = req.body;
+  const { text, minutes, seconds, order } = req.body;
   try {
     const questionPackage = await QuestionPackage.findById(id);
     if (!questionPackage) {
@@ -108,7 +129,7 @@ export const updateQuestionInPackage = async (req: Request, res: Response) => {
     if (!question) {
       return res.status(404).json({ message: 'Question not found' });
     }
-    question.set({ text, minutes, order });
+    question.set({ text, minutes, seconds, order });
     await questionPackage.save();
     res.json(questionPackage);
   } catch (error) {
@@ -116,6 +137,7 @@ export const updateQuestionInPackage = async (req: Request, res: Response) => {
   }
 };
 
+// Soru paketinden bir soruyu sil
 export const deleteQuestionFromPackage = async (req: Request, res: Response) => {
   const { id, questionId } = req.params;
   try {
