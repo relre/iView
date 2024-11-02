@@ -353,7 +353,19 @@ const ApplicationForm = () => {
      
       ) : (
         <div className='text-center'>
-            
+            <div className="container mx-auto p-4">
+  <div className="flex flex-col md:flex-row">
+    <div className="flex-1 bg-blue-500 p-4">
+      <h2 className="text-white">Birinci Sütun</h2>
+      <p className="text-white">Bu alan birinci sütun içeriği.</p>
+    </div>
+    <div className="flex-1 bg-green-500 p-4 mt-4 md:mt-0 md:ml-4">
+      <h2 className="text-white">İkinci Sütun</h2>
+      <p className="text-white">Bu alan ikinci sütun içeriği.</p>
+    </div>
+  </div>
+</div>
+
             <div className={`flex flex-col justify-center items-center min-h-screen`}>
                <div className={`${window.innerWidth < 800 && mediaStream ? 'hidden' : ''}`}><h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
                <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2></div>
@@ -362,7 +374,7 @@ const ApplicationForm = () => {
             <>
               
               <div className="relative md:flex md:justify-start">
-                <video ref={videoRef} autoPlay muted className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
+                <video ref={videoRef} muted autoPlay className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
                 
                 <div className='absolute top-5 left-10 sm:top-14   w-1/4 sm:w-1/6 flex items-center'>
                 <MicrophoneIcon className='h-6 w-6 text-white sm:text-green-600'/>

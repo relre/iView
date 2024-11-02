@@ -128,3 +128,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+video4.mp4
+video3.mp4
+video2.mp4
+
+
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+temp.wav
+temp_audio.wav
