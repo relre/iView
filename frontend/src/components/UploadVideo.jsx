@@ -2,24 +2,18 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const UploadVideo = () => {
-  const [file, setFile] = useState(null);
+  const [url, setUrl] = useState('');
   const [result, setResult] = useState(null);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const handleUrlChange = (e) => {
+    setUrl(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:5000/transcribe', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const response = await axios.post('http://localhost:5000/transcribe', { url });
       setResult(response.data);
     } catch (error) {
       console.error(error);
@@ -29,8 +23,8 @@ const UploadVideo = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit">Upload and Analyze</button>
+        <input type="text" placeholder="Enter video URL" value={url} onChange={handleUrlChange} />
+        <button type="submit">Analyze Video</button>
       </form>
       {result && (
         <div>

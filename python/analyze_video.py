@@ -1,15 +1,24 @@
+import subprocess
 import cv2
 import numpy as np
 from deepface import DeepFace
 import speech_recognition as sr
-from moviepy.editor import VideoFileClip
 from pydub import AudioSegment
 
 def extract_audio_from_video(video_path: str):
     """Videodan ses çıkarır ve geçici bir dosyaya kaydeder."""
-    video = VideoFileClip(video_path)
     audio_path = "temp_audio.wav"
-    video.audio.write_audiofile(audio_path)
+    command = [
+        'ffmpeg',
+        '-y',  # Overwrite output files without asking
+        '-i', video_path,
+        '-vn',  # No video
+        '-acodec', 'pcm_s16le',  # Audio codec
+        '-ar', '44100',  # Audio sample rate
+        '-ac', '2',  # Audio channels
+        audio_path
+    ]
+    subprocess.run(command, check=True)
     return audio_path
 
 def transcribe_audio(audio_path: str):
@@ -27,8 +36,8 @@ def transcribe_audio(audio_path: str):
     except sr.RequestError as e:
         return f"Google API hatası: {e}"
 
-def analyze_emotions(video_path: str, frame_interval: int = 40):
-    """Videodaki yüz ifadelerinden her 40 frame'de bir duygu analizi yapar."""
+def analyze_emotions(video_path, frame_interval=40):
+    """Analyze emotions in a video file by extracting frames at regular intervals."""
     video = cv2.VideoCapture(video_path)
     emotions = []
 
@@ -41,8 +50,10 @@ def analyze_emotions(video_path: str, frame_interval: int = 40):
         if frame_count % frame_interval == 0:
             print(f"Processing frame {frame_count}")
             try:
-                analysis = DeepFace.analyze(frame, actions=['emotion'])
-                dominant_emotion = analysis[0]['dominant_emotion']
+                analysis = DeepFace.analyze(frame, actions=['emotion'], enforce_detection=False)
+                if isinstance(analysis, list):
+                    analysis = analysis[0]  # Get the first dictionary from the list
+                dominant_emotion = analysis['dominant_emotion']
                 emotions.append(dominant_emotion)
                 print(f"Frame {frame_count}: {dominant_emotion}")
             except Exception as e:
@@ -52,8 +63,3 @@ def analyze_emotions(video_path: str, frame_interval: int = 40):
 
     video.release()
     return emotions
-
-# Example usage
-# audio_path = extract_audio_from_video("path_to_your_video_file")
-# print(transcribe_audio(audio_path))
-# print(analyze_emotions("path_to_your_video_file"))

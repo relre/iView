@@ -9,6 +9,14 @@ export interface IApplication {
   phone: string;
   gdprConsent: boolean;
   videoUrl: string;
+  datax: {
+    transcript: string;
+    sentiment: {
+      label: string;
+      score: number;
+    };
+    emotions: string[];
+  };
   status: 'pending' | 'approved' | 'rejected';
 }
 
@@ -49,6 +57,14 @@ const InterviewSchema: Schema = new Schema({
     phone: { type: String, required: true },
     gdprConsent: { type: Boolean, required: true },
     videoUrl: { type: String, required: true },
+    datax: {
+      transcript: { type: String, required: false },
+      sentiment: {
+        label: { type: String, required: false },
+        score: { type: Number, required: false },
+      },
+      emotions: { type: [String], required: false },
+    },
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
   }],
 });

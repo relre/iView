@@ -1,17 +1,38 @@
+import os
+import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from analyze_video import extract_audio_from_video, transcribe_audio, analyze_emotions
 from sentiment_analysis import analyze_sentiment
 
 app = Flask(__name__)
-CORS(app)  # CORS desteği ekleyin
+CORS(app)  # CORS support
+
+def update_application_data(interview_id, application_id, datax):
+    update_url = f'http://localhost:5555/api/interview/{interview_id}/applications/{application_id}/transcribe'
+    update_response = requests.put(update_url, json={"datax": datax})
+    print(f"PUT request to {update_url} with data {datax}")
+    print(f"PUT response status: {update_response.status_code}")
+    print(f"PUT response text: {update_response.text}")
+
+    if not update_response.ok:
+        return {"error": "Failed to update application data"}, 500
+
+    return update_response.json(), 200
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
-    file = request.files['file']
-    file_path = f"./{file.filename}"
-    file.save(file_path)
-    print(f"File saved to {file_path}")
+    data = request.get_json()
+    application_id = data['id']
+    interview_id = data['interviewId']
+    video_url = data['url']
+    file_path = "./temp_video.webm"
+
+    # Download the video from the URL
+    response = requests.get(video_url)
+    with open(file_path, 'wb') as file:
+        file.write(response.content)
+    print(f"File downloaded to {file_path}")
 
     audio_path = extract_audio_from_video(file_path)
     print(f"Audio extracted to {audio_path}")
@@ -25,7 +46,25 @@ def transcribe():
     emotions = analyze_emotions(file_path)
     print(f"Emotions: {emotions}")
 
-    return jsonify({"transcript": transcript, "sentiment": sentiment, "emotions": emotions})
+    # Clean up the downloaded video file
+    os.remove(file_path)
+    print(f"File {file_path} removed")
+
+    datax = {
+        "transcript": transcript,
+        "sentiment": sentiment,
+        "emotions": emotions
+    }
+
+    # Ensure all data is ready before making the PUT request
+    print(f"Data ready for PUT request: {datax}")
+
+    # Make a PUT request to update the application data
+    update_response, status_code = update_application_data(interview_id, application_id, datax)
+    if status_code != 200:
+        return jsonify(update_response), status_code
+
+    return jsonify({"datax": datax})
 
 if __name__ == '__main__':
     app.run(debug=True)

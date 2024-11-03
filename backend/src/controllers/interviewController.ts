@@ -80,11 +80,14 @@ export const getApplicationById = async (req: Request, res: Response): Promise<v
 export const addApplication = async (req: Request, res: Response): Promise<void> => {
   try {
     const application = await interviewService.addApplication(req.params.id, req.body);
-    res.status(201).json(application);
+    res.status(201).json(application); // ID içeren application döndürülüyor
   } catch (error) {
     res.status(500).json({ message: 'Error adding application', error });
   }
 };
+
+
+
 
 export const getApplications = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -101,5 +104,14 @@ export const updateApplicationStatus = async (req: Request, res: Response): Prom
     res.status(200).json(application);
   } catch (error) {
     res.status(500).json({ message: 'Error updating application status', error });
+  }
+};
+
+export const updateApplicationDatax = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const application = await interviewService.updateApplicationDatax(req.params.id, req.params.applicationId, req.body.datax);
+    res.status(200).json(application);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating application datax', error });
   }
 };

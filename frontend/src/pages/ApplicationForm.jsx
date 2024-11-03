@@ -14,6 +14,7 @@ const ApplicationForm = () => {
     phone: '',
     gdprConsent: false,
     videoUrl: '',
+    datax: '',
   });
   const [step, setStep] = useState(1);
   const [recording, setRecording] = useState(false);
@@ -225,6 +226,8 @@ const ApplicationForm = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+          
   
       if (response.status !== 200) {
         throw new Error(`Server error: ${response.status}`);

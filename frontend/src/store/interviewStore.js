@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import axios from 'axios';
 
 const useInterviewStore = create((set) => ({
   interviews: [],
@@ -6,6 +7,8 @@ const useInterviewStore = create((set) => ({
   application: null,
   totalApplications: 0,
   nonPendingCount: 0,
+  url: '',
+  transcribeResult: null,
   fetchInterviews: async () => {
     try {
       const response = await fetch('http://localhost:5555/api/interview');
@@ -85,7 +88,7 @@ const useInterviewStore = create((set) => ({
       console.error('Failed to delete interview:', error);
     }
   },
-  addApplication: async (link, interviewId, application) => {
+ addApplication: async (link, interviewId, application) => {
     try {
       console.log('Adding application:', application); // Debug log
       const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`, {
@@ -100,11 +103,46 @@ const useInterviewStore = create((set) => ({
         throw new Error(`Failed to add application: ${errorText}`);
       }
       const newApplication = await response.json();
-      set((state) => ({
-        applications: [...state.applications, newApplication],
-      }));
+      console.log('New application ID:', newApplication.id || newApplication._id);
+      const vidUrl = "http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
+
+      try {
+        const transcribeResponse = await axios.post('http://localhost:5000/transcribe', {
+          id: newApplication.id || newApplication._id,
+          interviewId: interviewId,
+          url: vidUrl
+        });
+
+        const { datax } = transcribeResponse.data;
+        console.log('Transcribe result:', datax); // Debug log
+
+        await interviewStore.updateApplicationDatax(interviewId, newApplication.id || newApplication._id, datax);
+      } catch (error) {
+        console.error('Error in transcribe request:', error);
+      }
     } catch (error) {
       console.error('Failed to add application:', error);
+    }
+  },
+
+  updateApplicationDatax: async (id, applicationId, transcribe) => {
+    try {
+      const response = await fetch(`http://localhost:5555/api/interview/${id}/applications/${applicationId}/transcribe`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ transcribe }),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to update application datax: ${errorText}`);
+      }
+      const updatedApplication = await response.json();
+      set({ application: updatedApplication });
+      console.log('Application datax updated:', updatedApplication); // Debug log
+    } catch (error) {
+      console.error('Failed to update application datax:', error);
     }
   },
   fetchApplications: async (link, interviewId) => {
@@ -132,6 +170,7 @@ const useInterviewStore = create((set) => ({
       }
       const data = await response.json();
       set({ application: data });
+      console.log('Fetched application:', data); // Debug log
     } catch (error) {
       console.error('Failed to fetch application by ID:', error);
     }

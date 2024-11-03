@@ -26,10 +26,17 @@ export const addApplication = async (interviewId: string, applicationData: IAppl
   if (!interview) {
     throw new Error('Interview not found');
   }
+
+  // Yeni bir application ekleyin
   interview.applications.push(applicationData);
   await interview.save();
-  return applicationData;
+
+  // Son eklenen application'ı ID ile birlikte alın
+  const newApplication = interview.applications[interview.applications.length - 1];
+  
+  return newApplication; // Bu şekilde ID içeren application döner
 };
+
 
 export const getApplications = async (interviewId: string): Promise<IApplication[]> => {
   const interview = await Interview.findById(interviewId);
@@ -68,4 +75,23 @@ export const getApplicationById = async (interviewId: string, applicationId: str
   }
   console.log(`Application found: ${application}`);
   return application;
+};
+
+export const updateApplicationDatax = async (interviewId: string, applicationId: string, datax: any): Promise<IApplication | null> => {
+  try {
+    const interview = await Interview.findById(interviewId);
+    if (!interview) {
+      throw new Error('Interview not found');
+    }
+    const application = interview.applications.find(app => app._id.toString() === applicationId);
+    if (!application) {
+      throw new Error('Application not found');
+    }
+    application.datax = datax;
+    await interview.save();
+    return application;
+  } catch (error) {
+    console.error('Error in updateApplicationDatax service:', error);
+    throw error;
+  }
 };
