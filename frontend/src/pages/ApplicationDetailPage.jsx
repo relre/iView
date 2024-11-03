@@ -144,6 +144,25 @@ const ApplicationDetailPage = () => {
         <button type="submit" className='bg-rtwgreen hover:bg-rtwgreendark text-sm text-white px-4 py-2 ml-2 rounded-lg'>Update</button>
       </form>
       </div>
+      <div className='mt-5 mr-10'>
+        <strong>T: </strong>{application.datax?.transcript ? application.datax.transcript : 'No transcript available'}
+      </div>      
+      <div className='mt-5 mr-10'>
+        <strong>Y: </strong>{application.datax?.sentiment ? `${application.datax.sentiment.label} (${application.datax.sentiment.score})` : 'No sentiment analysis available'}
+      </div>
+      <div className='mt-5 mr-10'>
+        <strong>D: </strong>
+        <ul>
+          {application.datax?.emotions ? (
+            application.datax.emotions.map((emotion, index) => (
+              <li key={index}>{emotion}</li>
+            ))
+          ) : (
+            <li>No emotion analysis available</li>
+          )}
+        </ul>
+      </div>
+
      
     </div>
   );
