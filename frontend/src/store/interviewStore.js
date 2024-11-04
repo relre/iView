@@ -1,6 +1,58 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
+const requestQueue = [];
+let isProcessingQueue = false;
+
+const processQueue = async () => {
+  if (isProcessingQueue || requestQueue.length === 0) return;
+
+  isProcessingQueue = true;
+  const { link, interviewId, application, resolve, reject } = requestQueue.shift();
+
+  try {
+    console.log('Adding application:', application); // Debug log
+    const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(application),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to add application: ${errorText}`);
+    }
+    const newApplication = await response.json();
+    console.log('New application ID:', newApplication.id || newApplication._id);
+    const vidUrl = "http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
+
+    try {
+      const transcribeResponse = await axios.post('http://localhost:5000/transcribe', {
+        id: newApplication.id || newApplication._id,
+        interviewId: interviewId,
+        url: vidUrl
+      });
+
+      const { datax } = transcribeResponse.data;
+      console.log('Transcribe result:', datax); // Debug log
+
+      await useInterviewStore.getState().updateApplicationDatax(interviewId, newApplication.id || newApplication._id, datax);
+      resolve();
+    } catch (error) {
+      console.error('Error in transcribe request:', error);
+      reject(error);
+    }
+  } catch (error) {
+    console.error('Failed to add application:', error);
+    reject(error);
+  } finally {
+    isProcessingQueue = false;
+    processQueue();
+  }
+};
+
+
 const useInterviewStore = create((set) => ({
   interviews: [],
   applications: [],
@@ -88,51 +140,22 @@ const useInterviewStore = create((set) => ({
       console.error('Failed to delete interview:', error);
     }
   },
- addApplication: async (link, interviewId, application) => {
-    try {
-      console.log('Adding application:', application); // Debug log
-      const response = await fetch(`http://localhost:5555/api/interview/${interviewId}/applications`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(application),
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to add application: ${errorText}`);
-      }
-      const newApplication = await response.json();
-      console.log('New application ID:', newApplication.id || newApplication._id);
-      const vidUrl = "http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
-
-      try {
-        const transcribeResponse = await axios.post('http://localhost:5000/transcribe', {
-          id: newApplication.id || newApplication._id,
-          interviewId: interviewId,
-          url: vidUrl
-        });
-
-        const { datax } = transcribeResponse.data;
-        console.log('Transcribe result:', datax); // Debug log
-
-        await interviewStore.updateApplicationDatax(interviewId, newApplication.id || newApplication._id, datax);
-      } catch (error) {
-        console.error('Error in transcribe request:', error);
-      }
-    } catch (error) {
-      console.error('Failed to add application:', error);
-    }
+  addApplication: (link, interviewId, application) => {
+    return new Promise((resolve, reject) => {
+      requestQueue.push({ link, interviewId, application, resolve, reject });
+      processQueue();
+    });
   },
 
-  updateApplicationDatax: async (id, applicationId, transcribe) => {
+
+  updateApplicationDatax: async (id, applicationId, datax) => {
     try {
       const response = await fetch(`http://localhost:5555/api/interview/${id}/applications/${applicationId}/transcribe`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ transcribe }),
+        body: JSON.stringify({ datax }),
       });
       if (!response.ok) {
         const errorText = await response.text();

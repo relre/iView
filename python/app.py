@@ -1,13 +1,25 @@
 import os
+import sys
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from analyze_video import extract_audio_from_video, transcribe_audio, analyze_emotions
 from sentiment_analysis import analyze_sentiment
+from celery import Celery
+from celery_config import make_celery  # Yeni dosya adıyla import edin
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 app = Flask(__name__)
 CORS(app)  # CORS support
 
+app.config.update(
+    broker_url='redis://localhost:6379/0',
+    result_backend='redis://localhost:6379/0'
+)
+
+celery = make_celery(app)  # Celery'i yapılandırın
+
+@celery.task
 def update_application_data(interview_id, application_id, datax):
     update_url = f'http://localhost:5555/api/interview/{interview_id}/applications/{application_id}/transcribe'
     update_response = requests.put(update_url, json={"datax": datax})
@@ -60,9 +72,7 @@ def transcribe():
     print(f"Data ready for PUT request: {datax}")
 
     # Make a PUT request to update the application data
-    update_response, status_code = update_application_data(interview_id, application_id, datax)
-    if status_code != 200:
-        return jsonify(update_response), status_code
+    update_application_data.delay(interview_id, application_id, datax)
 
     return jsonify({"datax": datax})
 
