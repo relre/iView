@@ -34,7 +34,8 @@ const QuestionListPage = () => {
     setIsSubmitting(true);
     try {
       const order = selectedPackage.questions.length;
-      await addQuestion(selectedPackage._id, { ...newQuestion, order });
+      const seconds = newQuestion.seconds > 59 ? 59 : newQuestion.seconds;
+      await addQuestion(selectedPackage._id, { ...newQuestion, seconds, order });
       setNewQuestion({ text: '', minutes: 0, seconds: 0, order: 0 });
       fetchQuestionPackages();
     } catch (error) {
@@ -49,7 +50,8 @@ const QuestionListPage = () => {
     e.preventDefault();
     if (editQuestionId) {
       try {
-        await updateQuestion(selectedPackage._id, editQuestionId, editQuestion);
+        const seconds = editQuestion.seconds > 59 ? 59 : editQuestion.seconds;
+        await updateQuestion(selectedPackage._id, editQuestionId, { ...editQuestion, seconds });
         setEditQuestionId(null);
         setEditQuestion({ text: '', minutes: 0, seconds: 0, order: 0 });
         fetchQuestionPackages();
@@ -115,10 +117,10 @@ const QuestionListPage = () => {
   if (!selectedPackage) return <div>Loading...</div>;
 
   const totalSeconds = selectedPackage.questions.reduce((sum, question) => sum + (question.minutes * 60) + question.seconds, 0);
-const totalMinutes = Math.floor(totalSeconds / 60);
-const remainingSeconds = totalSeconds % 60;
-const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format string oluşturma
-
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const remainingSeconds = totalSeconds % 60;
+  const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format string oluşturma
+  const totalQuestions = selectedPackage.questions.length;
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -131,8 +133,8 @@ const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format st
               <QuestionMarkCircleIcon className="w-8 h-8 text-center text-rtwgreen " />
             </div>
             <div>
-            <div className='text-2xl font-bold'>{formattedTotalTime}</div>
-            Total Time
+              <div className='text-2xl font-bold'>{totalQuestions}</div>
+              Total Questions
             </div>
           </div>
 
@@ -141,16 +143,16 @@ const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format st
               <ClockIcon className="w-8 h-8 text-center text-rtwyellow " />
             </div>
             <div>
-              <div className='text-2xl font-bold'>{totalMinutes}m {remainingSeconds}s</div>
+              <div className='text-2xl font-bold'>{formattedTotalTime}</div>
               Total Time
             </div>
           </div>
         </div>
 
         <div className='flex justify-end'>
-        <button onClick={() => setShowAddModal(true)} className="bg-rtwgreen hover:bg-rtwgreendark text-white px-4 py-2 rounded mb-4 flex items-center">
-          <PlusCircleIcon className="h-6 w-6 mr-2" /> Add New Question
-        </button>
+          <button onClick={() => setShowAddModal(true)} className="bg-rtwgreen hover:bg-rtwgreendark text-white px-4 py-2 rounded mb-4 flex items-center">
+            <PlusCircleIcon className="h-6 w-6 mr-2" /> Add New Question
+          </button>
         </div>
 
         <table className="min-w-full border-separate border-spacing-y-2 border-spacing-x-0">
@@ -199,10 +201,15 @@ const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format st
                 <input
                   type="number"
                   value={newQuestion.seconds}
-                  onChange={(e) => setNewQuestion({ ...newQuestion, seconds: parseInt(e.target.value) })}
+                  onChange={(e) => {
+                    const seconds = parseInt(e.target.value);
+                    setNewQuestion({ ...newQuestion, seconds: seconds > 59 ? 59 : seconds });
+                  }}
                   placeholder="Seconds"
                   className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
+                  min="0"
+                  max="59"
                 />
                 <div className="flex justify-end space-x-4">
                   <button onClick={() => setShowAddModal(false)} className="bg-white hover:bg-gray-100 text-sm text-black border px-4 py-2 rounded-lg">Cancel</button>
@@ -239,10 +246,15 @@ const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`; // Format st
                 <input
                   type="number"
                   value={editQuestion.seconds || 0}
-                  onChange={(e) => setEditQuestion({ ...editQuestion, seconds: parseInt(e.target.value) })}
+                  onChange={(e) => {
+                    const seconds = parseInt(e.target.value);
+                    setEditQuestion({ ...editQuestion, seconds: seconds > 59 ? 59 : seconds });
+                  }}
                   placeholder="Seconds"
                   className="w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-rtwgreen focus:border-transparent"
                   required
+                  min="0"
+                  max="59"
                 />
                 <div className="flex justify-end space-x-4">
                   <button onClick={() => setShowEditModal(false)} className="bg-white hover:bg-gray-100 text-sm text-black border px-4 py-2 rounded-lg">Cancel</button>
@@ -324,4 +336,4 @@ const Question = ({ question, index, moveQuestion, openEditQuestionForm, openDel
   );
 };
 
-export default QuestionListPage;303
+export default QuestionListPage;

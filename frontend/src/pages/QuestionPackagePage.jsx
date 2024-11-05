@@ -82,13 +82,16 @@ const QuestionPackagePage = () => {
           <tr>
             <th className="py-2 px-4 border-b text-start">Title</th>
             <th className="py-2 px-4 border-b text-end">Total Questions</th>
-            <th className="py-2 px-4 border-b text-end">Total Minutes</th>
+            <th className="py-2 px-4 border-b text-end">Total Time</th>
             <th className="py-2 px-4 border-b text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
           {questionPackages.map((pkg) => {
-            const totalMinutes = pkg.questions.reduce((sum, question) => sum + question.minutes, 0);
+            const totalSeconds = pkg.questions.reduce((sum, question) => sum + (question.minutes * 60) + question.seconds, 0);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const remainingSeconds = totalSeconds % 60;
+            const formattedTotalTime = `${totalMinutes}m ${remainingSeconds}s`;
             return (
               <tr key={pkg._id} className="p-2 bg-white mb-2 rounded shadow-sm hover:bg-rtwgreenligth">
                 <td className="py-2 px-4 border-l border-t border-b rounded-l-lg">
@@ -100,7 +103,7 @@ const QuestionPackagePage = () => {
                   <button className="px-2 py-1 rounded text-[0.9rem] text-rtwgreendark bg-rtwgreenligth2 mr-2"><strong>{pkg.questions.length}</strong> questions</button>
                 </td>
                 <td className="py-2 px-4 border-t border-b text-end">
-                  <button className="px-2 py-1 rounded text-[0.9rem] text-yellow-500 bg-yellow-100 mr-2"><strong>{totalMinutes}</strong> minutes</button>
+                  <button className="px-2 py-1 rounded text-[0.9rem] text-yellow-500 bg-yellow-100 mr-2"><strong>{formattedTotalTime}</strong></button>
                 </td>
                 <td className="py-2 px-4 border-r border-t border-b rounded-r-lg text-end flex justify-end space-x-2">
                   <button onClick={() => openEditForm(pkg)} className="px-2 py-1 rounded flex items-center mr-2 hover:text-rtwgreen"><PencilSquareIcon className="h-6 w-6 mr-1" />Edit</button>
