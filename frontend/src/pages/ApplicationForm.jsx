@@ -175,7 +175,7 @@ const ApplicationForm = () => {
     const showNextQuestion = () => {
       if (questionIndex < interviewQuestions.length) {
         setCurrentQuestion(interviewQuestions[questionIndex]);
-        const questionDuration = interviewQuestions[questionIndex].minutes * 60; // Convert minutes to seconds
+        const questionDuration = (interviewQuestions[questionIndex].minutes || 0) * 60 + (interviewQuestions[questionIndex].seconds || 0); // Convert minutes and seconds to total seconds
         setQuestionTimeLeft(questionDuration); // Initialize countdown timer
         const countdownInterval = setInterval(() => {
           setQuestionTimeLeft(prevTime => {
@@ -247,8 +247,13 @@ const ApplicationForm = () => {
     if (currentQuestionIndex < interviewQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setCurrentQuestion(interviewQuestions[currentQuestionIndex + 1]);
-      const questionDuration = interviewQuestions[currentQuestionIndex + 1].minutes * 60;
+      const questionDuration = (interviewQuestions[currentQuestionIndex + 1].minutes || 0) * 60 + (interviewQuestions[currentQuestionIndex + 1].seconds || 0);
+
       setQuestionTimeLeft(questionDuration);
+      clearTimeout(questionTimerRef.current); // Clear the previous timer
+      questionTimerRef.current = setTimeout(() => {
+        handleNextQuestion();
+      }, questionDuration * 1000);
     } else {
       stopRecording();
       setShowSubmitButton(true);
