@@ -28,7 +28,7 @@ const processQueue = async () => {
     const vidUrl = "https://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
 
     try {
-      const transcribeResponse = await axios.post('https://iviewback.relre.dev/transcribe', {
+      const transcribeResponse = await axios.post('https://iviewback.relre.dev:5000/transcribe', {
         id: newApplication.id || newApplication._id,
         interviewId: interviewId,
         url: vidUrl
