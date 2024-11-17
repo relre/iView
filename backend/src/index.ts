@@ -49,6 +49,12 @@ interface MulterRequest extends Request {
 }
 
 app.post('/api/upload', upload.single('file'), async (req: MulterRequest, res: Response) => {
+  // CORS başlıklarını ekleyin
+  res.header('Access-Control-Allow-Origin', 'https://iview.relre.dev');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -76,7 +82,7 @@ app.post('/api/upload', upload.single('file'), async (req: MulterRequest, res: R
     res.status(500).json({ error: 'Failed to upload video', details: err.response ? err.response.data : err.message });
   }
 });
-// Video fetch endpoint
+
 app.get('/api/video/:id', async (req, res) => {
   try {
     const videoId = req.params.id;
