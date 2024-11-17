@@ -25,7 +25,9 @@ app.use(cors({
   credentials: true,
   allowedHeaders: 'Content-Type,Authorization'
 }));
-app.use(express.json());
+app.use(express.json({ limit: '140mb' }));
+app.use(express.urlencoded({ limit: '140mb', extended: true }));
+
 console.log('MONGO_URI:', process.env.MONGO_URI);
 console.log('VIDEO_API_PROJECT:', process.env.VIDEO_API_PROJECT);
 console.log('VIDEO_API_BUCKET:', process.env.VIDEO_API_BUCKET);
@@ -40,6 +42,8 @@ mongoose.connect(process.env.MONGO_URI!, {})
 app.use('/api', questionPackageRoutes);
 app.use('/api', interviewRoutes);
 app.use('/api/auth', authRoutes);
+
+
 app.use('/proxy', proxyRouter);
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
