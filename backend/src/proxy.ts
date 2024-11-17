@@ -4,7 +4,7 @@ import { createProxyServer } from 'http-proxy';
 const router = Router();
 const proxy = createProxyServer();
 
-router.get('/', (req, res) => {
+router.get('/proxy', (req, res) => {
   const videoUrl = req.query.url as string;
   if (!videoUrl) {
     return res.status(400).json({ error: 'URL is required' });
