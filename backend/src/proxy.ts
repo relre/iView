@@ -1,10 +1,10 @@
-import express from 'express';
+import { Router } from 'express';
 import { createProxyServer } from 'http-proxy';
 
-const app = express();
+const router = Router();
 const proxy = createProxyServer();
 
-app.get('/proxy', (req, res) => {
+router.get('/', (req, res) => {
   const videoUrl = req.query.url as string;
   if (!videoUrl) {
     return res.status(400).json({ error: 'URL is required' });
@@ -16,4 +16,4 @@ app.get('/proxy', (req, res) => {
   });
 });
 
-export default app;
+export default router;
