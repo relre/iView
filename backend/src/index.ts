@@ -9,7 +9,7 @@ import multer from 'multer';
 import axios from 'axios';
 import FormData from 'form-data';
 import { Blob } from 'buffer';
-
+import proxyApp from './proxy';
 
 
 
@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGO_URI!, {})
 app.use('/api', questionPackageRoutes);
 app.use('/api', interviewRoutes);
 app.use('/api/auth', authRoutes);
-
+app.use('/proxy', proxyApp);
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
