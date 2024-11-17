@@ -22,7 +22,7 @@ celery = make_celery(app)  # Celery'i yapılandırın
 @celery.task
 def update_application_data(interview_id, application_id, datax):
     update_url = f'https://iviewback.relre.dev/api/interview/{interview_id}/applications/{application_id}/transcribe'
-    update_response = requests.put(update_url, json={"datax": datax}, verify='/etc/ssl/certs/ca-certificates.crt')
+    update_response = requests.put(update_url, json={"datax": datax}, verify=False)
     print(f"PUT request to {update_url} with data {datax}")
     print(f"PUT response status: {update_response.status_code}")
     print(f"PUT response text: {update_response.text}")
@@ -41,7 +41,7 @@ def transcribe():
     file_path = "./temp_video.webm"
 
     # Download the video from the URL
-    response = requests.get(video_url, verify='/etc/ssl/certs/ca-certificates.crt')
+    response = requests.get(video_url, verify=False)
     with open(file_path, 'wb') as file:
         file.write(response.content)
     print(f"File downloaded to {file_path}")
