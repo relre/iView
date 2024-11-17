@@ -39,6 +39,8 @@ const ApplicationForm = () => {
   const [submit4Form, setSubmit4Form] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Track the current question index
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for button loading
+
 
   useEffect(() => {
     const fetchInterview = async () => {
@@ -64,6 +66,7 @@ const ApplicationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (step === 1) {
       if (!formData.gdprConsent) {
         setWarningMessage('KVKK metnini okuyup onaylamanız gerekmektedir.');
@@ -72,7 +75,8 @@ const ApplicationForm = () => {
       setWarningMessage('');
       setStep(2);
     } else {
-      console.log('Submitting form data:', formData);
+      setIsSubmitting(true);
+       //  console.log('Submitting form data:', formData);
       try {
         if (videoBlob) {
           const videoUrl = await uploadVideo(videoBlob);
@@ -82,8 +86,10 @@ const ApplicationForm = () => {
         setWarningMessage('Başvurunuz başarıyla alındı.');
         setSubmitForm(true);
       } catch (error) {
-        console.error('Failed to submit application:', error);
+         //  console.error('Failed to submit application:', error);
         setWarningMessage(`Failed to submit application: ${error.message}`);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -118,12 +124,12 @@ const ApplicationForm = () => {
 
       updateAudioLevel();
     } catch (error) {
-      console.error('Failed to get media stream:', error);
+       //  console.error('Failed to get media stream:', error);
     }
   };
 
   const startRecording = () => {
-    console.log('Starting recording...');
+    //  console.log('Starting recording...');
     const recorder = new MediaRecorder(mediaStream);
     mediaRecorderRef.current = recorder;
     const chunks = [];
@@ -134,24 +140,24 @@ const ApplicationForm = () => {
       mediaStream.getTracks().forEach(track => track.stop());
     };
     recorder.start();
-    console.log('MediaRecorder state:', recorder.state);
+    //  console.log('MediaRecorder state:', recorder.state);
     setRecording(true);
     startTimer();
     startQuestionTimer();
   };
 
   const stopRecording = () => {
-    console.log('Stopping recording...');
+    //  console.log('Stopping recording...');
     const recorder = mediaRecorderRef.current;
     if (recorder && recorder.state !== 'inactive') {
-      console.log('MediaRecorder state:', recorder.state);
+     //   console.log('MediaRecorder state:', recorder.state);
       recorder.stop();
       setRecording(false);
       stopTimer();
       stopQuestionTimer();
       setShowSubmitButton(true);
     } else {
-      console.log('MediaRecorder is already inactive or not initialized.');
+     //   console.log('MediaRecorder is already inactive or not initialized.');
     }
   };
 
@@ -169,6 +175,8 @@ const ApplicationForm = () => {
   const startQuestionTimer = () => {
     setTotalQuestions(interviewQuestions.length); // Toplam soruları ayarla
     let questionIndex = 0;
+    let questionSize = 1;
+    setCurrentQuestionIndex(questionSize);
     const showNextQuestion = () => {
       if (questionIndex < interviewQuestions.length) {
         setCurrentQuestion(interviewQuestions[questionIndex]);
@@ -185,11 +193,13 @@ const ApplicationForm = () => {
         }, 1000);
         questionTimerRef.current = setTimeout(() => {
           questionIndex++;
+          questionSize++;
+          setCurrentQuestionIndex(questionSize);
           showNextQuestion();
         }, questionDuration * 1000);
       } else {
         setCurrentQuestion(null);
-        console.log('All questions completed. Stopping recording...');
+         // console.log('All questions completed. Stopping recording...');
         stopRecording();
         setShowSubmitButton(true);
       }
@@ -344,6 +354,12 @@ const ApplicationForm = () => {
       ) : (
         <div className='text-center'>
           <div className="container mx-auto p-4">
+
+            <div className={`${window.innerWidth < 800 && mediaStream ? 'hidden' : ''}`}>
+              <h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
+              <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2>
+            </div>
+
             <div className="flex flex-col md:flex-row">
               <div className="flex-1 bg-blue-500 p-4">
                 <h2 className="text-white">Birinci Sütun</h2>
@@ -362,6 +378,18 @@ const ApplicationForm = () => {
             </div>
             {!showSubmitButton && (
               <>
+
+
+            <div className="flex flex-col md:flex-row">
+              <div className="flex-1 bg-blue-500 p-4">
+                <h2 className="text-white">Birinci Sütun</h2>
+                <p className="text-white">Bu alan birinci sütun içeriği.</p>
+              </div>
+              <div className="flex-1 bg-green-500 p-4 mt-4 md:mt-0 md:ml-4">
+                <h2 className="text-white">İkinci Sütun</h2>
+                <p className="text-white">Bu alan ikinci sütun içeriği.</p>
+              </div>
+            </div>
                 <div className="relative md:flex md:justify-start">
                   <video ref={videoRef} muted autoPlay className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
                   <div className='absolute top-5 left-10 sm:top-14 w-1/4 sm:w-1/6 flex items-center'>
@@ -421,7 +449,7 @@ const ApplicationForm = () => {
                       </li>
                       <li className="flex items-center justify-center space-x-2.5 rtl:space-x-reverse">
                         <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
-                          3
+                          4
                         </span>
                         <span>
                           <h3 className="text-start font-medium leading-tight">Mülakatı Gönderin</h3>
@@ -438,18 +466,10 @@ const ApplicationForm = () => {
                   <div>
                     <div className="mb-4">
                       <span className="text-rtwgreen font-bold">
-                        {currentQuestionIndex + 1}/{totalQuestions} Toplam Soru Sayısı 
+                        {currentQuestionIndex}/{totalQuestions} Toplam Soru Sayısı 
                       </span>
                     </div>
-                    {currentQuestionIndex < interviewQuestions.length - 1 ? (
-                      <button onClick={handleNextQuestion} className="bg-blue-500 text-white px-4 py-2 mt-4 rounded">
-                        Sonraki Soru
-                      </button>
-                    ) : (
-                      <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
-                        Mülakatı Bitir
-                      </button>
-                    )}
+                 
                   </div>
                 ) : (
                   <div>
@@ -473,9 +493,13 @@ const ApplicationForm = () => {
             {showSubmitButton && (
               <div className={`flex flex-col ${submitForm ? 'hidden' : ' '}`}>
                 <span className='text-2xl font-bold text-rtwyellow'>Son bir adım kaldı...</span>
-                <button onClick={handleSubmit} className="bg-rtwgreen hover:bg-rtwgreendark text-white px-4 py-2 rounded mt-4">
-                  Mülakat Başvurusunu Gönder
-                </button>
+                <button
+            onClick={handleSubmit}
+            className={`bg-rtwgreen hover:bg-rtwgreendark text-white px-4 py-2 rounded mt-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Gönderiliyor... Lütfen bekleyin!' : 'Mülakat Başvurusunu Gönder'}
+          </button>
               </div>
             )}
             {warningMessage && 
