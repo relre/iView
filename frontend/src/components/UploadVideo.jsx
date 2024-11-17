@@ -13,7 +13,7 @@ const UploadVideo = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/transcribe', { url });
+      const response = await axios.post('https://154.53.165.65/transcribe', { url });
       setResult(response.data);
     } catch (error) {
       console.error(error);
