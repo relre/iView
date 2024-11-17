@@ -218,7 +218,7 @@ const ApplicationForm = () => {
     formData.append('file', blob, fileName);
   
     try {
-      const response = await axios.post('http://154.53.165.65/api/upload', formData, {
+      const response = await axios.post('https://iviewback.relre.dev/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

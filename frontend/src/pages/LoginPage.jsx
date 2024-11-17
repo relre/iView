@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://154.53.165.65/api/auth/login', {
+      const response = await fetch('https://iviewback.relre.dev/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

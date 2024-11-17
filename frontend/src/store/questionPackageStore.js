@@ -4,7 +4,7 @@ const useQuestionPackageStore = create((set) => ({
   questionPackages: [],
   fetchQuestionPackages: async () => {
     try {
-      const response = await fetch('http://154.53.165.65/api/question-packages', {
+      const response = await fetch('https://iviewback.relre.dev/api/question-packages', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -21,7 +21,7 @@ const useQuestionPackageStore = create((set) => ({
   },
   addQuestionPackage: async (title) => {
     try {
-      const response = await fetch('http://154.53.165.65/api/question-packages', {
+      const response = await fetch('https://iviewback.relre.dev/api/question-packages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const useQuestionPackageStore = create((set) => ({
   },
   updateQuestionPackage: async (id, title) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/question-packages/${id}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/question-packages/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const useQuestionPackageStore = create((set) => ({
   },
   deleteQuestionPackage: async (id) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/question-packages/${id}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/question-packages/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -82,7 +82,7 @@ const useQuestionPackageStore = create((set) => ({
   },
   addQuestion: async (packageId, question) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/question-packages/${packageId}/questions`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/question-packages/${packageId}/questions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const useQuestionPackageStore = create((set) => ({
   },
   updateQuestion: async (packageId, questionId, question) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/question-packages/${packageId}/questions/${questionId}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/question-packages/${packageId}/questions/${questionId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ const useQuestionPackageStore = create((set) => ({
   },
   deleteQuestion: async (packageId, questionId) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/question-packages/${packageId}/questions/${questionId}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/question-packages/${packageId}/questions/${questionId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -162,7 +162,7 @@ const useQuestionPackageStore = create((set) => ({
 
 const updateQuestionOrder = async (packageId, questions) => {
   try {
-    await fetch(`http://154.53.165.65/api/questionPackages/${packageId}/questions/order`, {
+    await fetch(`https://iviewback.relre.dev/api/questionPackages/${packageId}/questions/order`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

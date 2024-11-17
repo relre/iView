@@ -12,7 +12,7 @@ const processQueue = async () => {
 
   try {
     console.log('Adding application:', application); // Debug log
-    const response = await fetch(`http://154.53.165.65/api/interview/${interviewId}/applications`, {
+    const response = await fetch(`https://iviewback.relre.dev/api/interview/${interviewId}/applications`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,10 +25,10 @@ const processQueue = async () => {
     }
     const newApplication = await response.json();
     console.log('New application ID:', newApplication.id || newApplication._id);
-    const vidUrl = "http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
+    const vidUrl = "https://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
 
     try {
-      const transcribeResponse = await axios.post('http://154.53.165.65/transcribe', {
+      const transcribeResponse = await axios.post('https://iviewback.relre.dev/transcribe', {
         id: newApplication.id || newApplication._id,
         interviewId: interviewId,
         url: vidUrl
@@ -63,12 +63,12 @@ const useInterviewStore = create((set) => ({
   transcribeResult: null,
   fetchInterviews: async () => {
     try {
-      const response = await fetch('http://154.53.165.65/api/interview');
+      const response = await fetch('https://iviewback.relre.dev/api/interview');
       const interviews = await response.json();
   
       // Fetch applications for each interview and calculate totals
       const updatedInterviews = await Promise.all(interviews.map(async (interview) => {
-        const appResponse = await fetch(`http://154.53.165.65/api/interview/${interview._id}/applications`);
+        const appResponse = await fetch(`https://iviewback.relre.dev/api/interview/${interview._id}/applications`);
         const applications = await appResponse.json();
         const totalApplications = applications.length;
         const nonPendingCount = applications.filter(app => app.status === 'pending').length;
@@ -87,7 +87,7 @@ const useInterviewStore = create((set) => ({
   },
   fetchQuestionPackages: async () => {
     try {
-      const response = await fetch('http://154.53.165.65/api/question-packages');
+      const response = await fetch('https://iviewback.relre.dev/api/question-packages');
       const data = await response.json();
       set({ questionPackages: data });
     } catch (error) {
@@ -96,7 +96,7 @@ const useInterviewStore = create((set) => ({
   },
    fetchInterviewQuestions: async (id) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}`);
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`);
       const data = await response.json();
       console.log('Fetched interview questions:', data); // Konsola yazdır
       const questions = data.questionPacks.flatMap(pack => pack.questions);
@@ -107,7 +107,7 @@ const useInterviewStore = create((set) => ({
   },
   addInterview: async (interview) => {
     try {
-      const response = await fetch('http://154.53.165.65/api/interview', {
+      const response = await fetch('https://iviewback.relre.dev/api/interview', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const useInterviewStore = create((set) => ({
   },
   deleteInterview: async (id) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -150,7 +150,7 @@ const useInterviewStore = create((set) => ({
 
   updateApplicationDatax: async (id, applicationId, datax) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}/applications/${applicationId}/transcribe`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}/applications/${applicationId}/transcribe`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ const useInterviewStore = create((set) => ({
   fetchApplications: async (link, interviewId) => {
     try {
       console.log(`Fetching applications for interview ID: ${interviewId}`);
-      const response = await fetch(`http://154.53.165.65/api/interview/${interviewId}/applications`);
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${interviewId}/applications`);
       const data = await response.json();
       console.log('Fetched applications ID and data', interviewId, data);
       const nonPendingCount = data.filter((application) => application.status === "pending").length;
@@ -186,7 +186,7 @@ const useInterviewStore = create((set) => ({
   },
   fetchApplicationById: async (id, applicationId) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}/applications/${applicationId}`);
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}/applications/${applicationId}`);
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to fetch application by ID: ${errorText}`);
@@ -200,7 +200,7 @@ const useInterviewStore = create((set) => ({
   },
   fetchInterviewById: async (id) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}`);
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch interview');
       }
@@ -213,7 +213,7 @@ const useInterviewStore = create((set) => ({
   },
   fetchSecondInterviewById: async (id) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}`);
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`);
       const data = await response.json();
       console.log('Fetched interview:', data); // Log the fetched interview
       set({ interviewsec: data });
@@ -223,7 +223,7 @@ const useInterviewStore = create((set) => ({
   },
    updateInterview: async (id, updatedInterview) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ const useInterviewStore = create((set) => ({
   },
   updateApplicationStatus: async (id, applicationId, status) => {
     try {
-      const response = await fetch(`http://154.53.165.65/api/interview/${id}/applications/${applicationId}`, {
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}/applications/${applicationId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
