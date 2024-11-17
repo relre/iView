@@ -99,6 +99,7 @@ app.get('/api/video/:id', async (req, res) => {
   }
 });
 
+
 app.get('/', (req, res) => {
   res.send('HR App Backend');
 });
