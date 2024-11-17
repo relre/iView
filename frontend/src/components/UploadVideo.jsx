@@ -13,7 +13,7 @@ const UploadVideo = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://iviewback.relre.dev/transcribe', { url });
+      const response = await axios.post('http://iviewback.relre.dev:5000/transcribe', { url });
       setResult(response.data);
     } catch (error) {
       console.error(error);
