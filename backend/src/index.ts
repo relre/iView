@@ -21,6 +21,9 @@ const PORT = process.env.PORT || 5555;
 
 app.use(cors({
   origin: 'https://iview.relre.dev',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type,Authorization'
 }));
 app.use(express.json());
 console.log('MONGO_URI:', process.env.MONGO_URI);

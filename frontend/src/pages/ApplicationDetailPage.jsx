@@ -52,7 +52,7 @@ const ApplicationDetailPage = () => {
   }
 
 
-  const backendProxyUrl = 'https://iviewback.relre.dev/proxy';
+  const backendProxyUrl = 'https://iviewback.relre.dev/proxy/proxy';
   const originalVideoUrl = `http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/${application.videoUrl}`;
   const videoUrl = `${backendProxyUrl}?url=${encodeURIComponent(originalVideoUrl)}`;
   // const videoUrl = `http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/${application.videoUrl}`;
