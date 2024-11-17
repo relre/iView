@@ -22,6 +22,11 @@ app.use(cors({
   origin: 'https://iview.relre.dev',
 }));
 app.use(express.json());
+console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('VIDEO_API_PROJECT:', process.env.VIDEO_API_PROJECT);
+console.log('VIDEO_API_BUCKET:', process.env.VIDEO_API_BUCKET);
+console.log('VIDEO_API_KEY:', process.env.VIDEO_API_KEY);
+console.log('VIDEO_API_LINK:', process.env.VIDEO_API_LINK);
 
 console.log(process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI!, {})
