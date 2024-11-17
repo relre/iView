@@ -1,22 +1,17 @@
 import express from 'express';
-import { createProxyMiddleware, Options } from 'http-proxy-middleware';
+import request from 'request';
 
 const app = express();
 
-app.use('/proxy', (req, res, next) => {
+app.get('/proxy', (req, res) => {
   const videoUrl = req.query.url as string;
   if (!videoUrl) {
     return res.status(400).json({ error: 'URL is required' });
   }
-  const proxyOptions: Options = {
-    target: videoUrl,
-    changeOrigin: true,
-    onError: (err: Error, _req: express.Request, res: express.Response) => {
-      console.error('Error fetching video:', err.message);
-      res.status(500).json({ error: 'Failed to fetch video', details: err.message });
-    }
-  };
-  createProxyMiddleware(proxyOptions)(req, res, next);
+  request(videoUrl).pipe(res).on('error', (err) => {
+    console.error('Error fetching video:', err.message);
+    res.status(500).json({ error: 'Failed to fetch video', details: err.message });
+  });
 });
 
 export default app;
