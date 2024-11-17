@@ -9,6 +9,8 @@ import multer from 'multer';
 import axios from 'axios';
 import FormData from 'form-data';
 import { Blob } from 'buffer';
+import proxyApp from './proxy';
+
 
 
 dotenv.config();
@@ -20,6 +22,7 @@ app.use(cors({
   origin: 'https://iview.relre.dev',
 }));
 app.use(express.json());
+app.use('/proxy', proxyApp);
 
 mongoose.connect(process.env.MONGO_URI!, {})
   .then(() => console.log('MongoDB connected'))

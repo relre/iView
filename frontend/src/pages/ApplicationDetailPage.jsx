@@ -51,7 +51,11 @@ const ApplicationDetailPage = () => {
     return <div>Loading...</div>;
   }
 
-  const videoUrl = `http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/${application.videoUrl}`;
+
+  const backendProxyUrl = 'https://iviewback.relre.dev/api';
+  const originalVideoUrl = `http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/${application.videoUrl}`;
+  const videoUrl = `${backendProxyUrl}?url=${encodeURIComponent(originalVideoUrl)}`;
+  // const videoUrl = `http://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/${application.videoUrl}`;
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);

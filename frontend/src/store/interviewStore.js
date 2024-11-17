@@ -1,57 +1,4 @@
 import { create } from 'zustand';
-import axios from 'axios';
-
-const requestQueue = [];
-let isProcessingQueue = false;
-
-const processQueue = async () => {
-  if (isProcessingQueue || requestQueue.length === 0) return;
-
-  isProcessingQueue = true;
-  const { link, interviewId, application, resolve, reject } = requestQueue.shift();
-
-  try {
-    console.log('Adding application:', application); // Debug log
-    const response = await fetch(`https://iviewback.relre.dev/api/interview/${interviewId}/applications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(application),
-    });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to add application: ${errorText}`);
-    }
-    const newApplication = await response.json();
-    console.log('New application ID:', newApplication.id || newApplication._id);
-    const vidUrl = "https://tkk04oksokwwgwswgg84cg4w.5.253.143.162.sslip.io/uploads/RemoteTech/Emin-Okan/" + application.videoUrl;
-
-    try {
-      const transcribeResponse = await axios.post('https://iviewback.relre.dev:5000/transcribe', {
-        id: newApplication.id || newApplication._id,
-        interviewId: interviewId,
-        url: vidUrl
-      });
-
-      const { datax } = transcribeResponse.data;
-      console.log('Transcribe result:', datax); // Debug log
-
-      await useInterviewStore.getState().updateApplicationDatax(interviewId, newApplication.id || newApplication._id, datax);
-      resolve();
-    } catch (error) {
-      console.error('Error in transcribe request:', error);
-      reject(error);
-    }
-  } catch (error) {
-    console.error('Failed to add application:', error);
-    reject(error);
-  } finally {
-    isProcessingQueue = false;
-    processQueue();
-  }
-};
-
 
 const useInterviewStore = create((set) => ({
   interviews: [],
@@ -59,8 +6,6 @@ const useInterviewStore = create((set) => ({
   application: null,
   totalApplications: 0,
   nonPendingCount: 0,
-  url: '',
-  transcribeResult: null,
   fetchInterviews: async () => {
     try {
       const response = await fetch('https://iviewback.relre.dev/api/interview');
@@ -140,32 +85,26 @@ const useInterviewStore = create((set) => ({
       console.error('Failed to delete interview:', error);
     }
   },
-  addApplication: (link, interviewId, application) => {
-    return new Promise((resolve, reject) => {
-      requestQueue.push({ link, interviewId, application, resolve, reject });
-      processQueue();
-    });
-  },
-
-
-  updateApplicationDatax: async (id, applicationId, datax) => {
+  addApplication: async (link, interviewId, application) => {
     try {
-      const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}/applications/${applicationId}/transcribe`, {
-        method: 'PUT',
+      console.log('Adding application:', application); // Debug log
+      const response = await fetch(`https://iviewback.relre.dev/api/interview/${interviewId}/applications`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ datax }),
+        body: JSON.stringify(application),
       });
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Failed to update application datax: ${errorText}`);
+        throw new Error(`Failed to add application: ${errorText}`);
       }
-      const updatedApplication = await response.json();
-      set({ application: updatedApplication });
-      console.log('Application datax updated:', updatedApplication); // Debug log
+      const newApplication = await response.json();
+      set((state) => ({
+        applications: [...state.applications, newApplication],
+      }));
     } catch (error) {
-      console.error('Failed to update application datax:', error);
+      console.error('Failed to add application:', error);
     }
   },
   fetchApplications: async (link, interviewId) => {
@@ -193,7 +132,6 @@ const useInterviewStore = create((set) => ({
       }
       const data = await response.json();
       set({ application: data });
-      console.log('Fetched application:', data); // Debug log
     } catch (error) {
       console.error('Failed to fetch application by ID:', error);
     }
