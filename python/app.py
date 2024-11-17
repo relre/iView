@@ -10,7 +10,7 @@ from celery_config import make_celery  # Yeni dosya adıyla import edin
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 app = Flask(__name__)
-CORS(app)  # CORS support
+CORS(app, resources={r"/*": {"origins": "https://iview.relre.dev"}})  # CORS support
 
 app.config.update(
     broker_url='redis://localhost:6379/0',
