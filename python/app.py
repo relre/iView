@@ -21,7 +21,7 @@ celery = make_celery(app)  # Celery'i yapılandırın
 
 @celery.task
 def update_application_data(interview_id, application_id, datax):
-    update_url = f'http://localhost:5555/api/interview/{interview_id}/applications/{application_id}/transcribe'
+    update_url = f'https://iviewback.relre.dev/api/interview/{interview_id}/applications/{application_id}/transcribe'
     update_response = requests.put(update_url, json={"datax": datax})
     print(f"PUT request to {update_url} with data {datax}")
     print(f"PUT response status: {update_response.status_code}")
