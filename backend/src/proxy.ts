@@ -11,7 +11,7 @@ router.get('/proxy', (req, res) => {
   }
 
   proxy.web(req, res, { target: videoUrl, changeOrigin: true }, (err) => {
-    console.error('Error fetching video:', err.message);
+   //   console.error('Error fetching video:', err.message);
     res.status(500).json({ error: 'Failed to fetch video', details: err.message });
   });
 });

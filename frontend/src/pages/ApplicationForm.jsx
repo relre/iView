@@ -359,59 +359,50 @@ const ApplicationForm = () => {
               <h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
               <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2>
             </div>
-
-            <div className="flex flex-col md:flex-row">
-              <div className="flex-1 bg-blue-500 p-4">
-                <h2 className="text-white">Birinci Sütun</h2>
-                <p className="text-white">Bu alan birinci sütun içeriği.</p>
-              </div>
-              <div className="flex-1 bg-green-500 p-4 mt-4 md:mt-0 md:ml-4">
-                <h2 className="text-white">İkinci Sütun</h2>
-                <p className="text-white">Bu alan ikinci sütun içeriği.</p>
-              </div>
-            </div>
           </div>
-          <div className={`flex flex-col justify-center items-center min-h-screen`}>
-            <div className={`${window.innerWidth < 800 && mediaStream ? 'hidden' : ''}`}>
-              <h1 className='text-3xl text-rtwgreen text-gr'>{intName}</h1>
-              <h2 className=" text-center text-3xl text-rtwyellow font-bold text-rtwgreen mb-5">Video Mülakatı</h2>
-            </div>
+          <div className={`flex flex-col justify-center items-center  min-h-screen`}>
+            
             {!showSubmitButton && (
               <>
 
 
-            <div className="flex flex-col md:flex-row">
-              <div className="flex-1 bg-blue-500 p-4">
-                <h2 className="text-white">Birinci Sütun</h2>
-                <p className="text-white">Bu alan birinci sütun içeriği.</p>
-              </div>
-              <div className="flex-1 bg-green-500 p-4 mt-4 md:mt-0 md:ml-4">
-                <h2 className="text-white">İkinci Sütun</h2>
-                <p className="text-white">Bu alan ikinci sütun içeriği.</p>
-              </div>
-            </div>
-                <div className="relative md:flex md:justify-start">
-                  <video ref={videoRef} muted autoPlay className={`w-half min-h-screen md:w-1/2 md:mt-[-135px] md:mb-[-80px] mb-4 ${window.innerWidth < 800 ? 'mt-[-200px]' : ''} ${mediaStream ? ' ' : 'hidden'}`}></video>
-                  <div className='absolute top-5 left-10 sm:top-14 w-1/4 sm:w-1/6 flex items-center'>
+            <div className={`flex flex-col sm:mt-[-100px] md:flex-row ${mediaStream ? ' ' : 'hidden'}`}>
+              <div className="flex-1 p-4 relative">
+              
+           
+
+
+               
+                  <video ref={videoRef} muted autoPlay className={`${window.innerWidth < 800 ? 'mt-[-30px] m-h-screen' : 'w-full '} ${mediaStream ? ' ' : 'hidden'}`}></video>
+                  <div className={`absolute top-5 left-10 sm:top-14 w-1/4 sm:w-1/6 flex items-center ${mediaStream ? ' ' : 'hidden'}`}>
                     <MicrophoneIcon className='h-6 w-6 text-white sm:text-green-600'/>
                     <div className="bg-gray-500 w-full h-2 rounded">
                       <div className="bg-green-500 h-2 rounded" style={{ width: `${audioLevel / 2.55}%` }}></div>
                     </div>
                   </div>
                   {recording && (
-                    <div className="absolute top-0 left-[45%] sm:top-10 rigth-0 bg-black text-white p-2 text-xs rounded-lg">
+                    <div className="absolute top-5 right-10 sm:top-14 bg-black text-white p-2 text-xs rounded-lg">
                       {formatTime(timer)}
                     </div>
                   )}
-                  {currentQuestion &&  (
-                    <div className="bg-white text-black p-2 flex-col mt-[-100px] sm:mt-8 sm:ml-5 sm:w-full sm:text-start">
+                 
+
+
+              </div>
+              <div className="flex-1 p-4 mt-4 md:mt-0 md:ml-4">
+                
+                {currentQuestion &&  (
+                    <div className="bg-white text-black p-2 flex-col mt-[-40px] sm:mt-8 sm:ml-5 sm:w-full sm:text-start">
                       <span className="bg-gray-200 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">
                         {formatTime(questionTimeLeft)}
                       </span>
                       <p className='mt-2 sm:text-3xl sm:font-bold sm:text-rtwgreen'>{currentQuestion.text}</p> 
                     </div>
                   )}
-                </div>
+               
+              </div>
+            </div>
+              
                 {!mediaStream ? (
                   <div className='flex flex-col md:items-center'>
                     <div className='border-2 border-rtwgreen p-3 m-3 rounded-lg md:w-1/2'>
@@ -473,7 +464,7 @@ const ApplicationForm = () => {
                   </div>
                 ) : (
                   <div>
-                    <div className="relative flex flex-col p-3 mt-[-100px]">
+                    <div className="relative flex flex-col p-3 mt-[-50px] sm:mt-1">
                       <span className='text-rtwgreen'>Önemli Notlar</span>
                       <ul className='list-none text-start m-3 text-sm'> 
                         <li>- Kameranızı ve mikrofonunuzu test edin.</li>

@@ -27,7 +27,7 @@ const useInterviewStore = create((set) => ({
   
       set({ interviews: updatedInterviews });
     } catch (error) {
-      console.error('Failed to fetch interviews:', error);
+     //  console.error('Failed to fetch interviews:', error);
     }
   },
   fetchQuestionPackages: async () => {
@@ -36,18 +36,18 @@ const useInterviewStore = create((set) => ({
       const data = await response.json();
       set({ questionPackages: data });
     } catch (error) {
-      console.error('Failed to fetch question packages:', error);
+     //  console.error('Failed to fetch question packages:', error);
     }
   },
    fetchInterviewQuestions: async (id) => {
     try {
       const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`);
       const data = await response.json();
-      console.log('Fetched interview questions:', data); // Konsola yazdır
+     //  console.log('Fetched interview questions:', data); // Konsola yazdır
       const questions = data.questionPacks.flatMap(pack => pack.questions);
       set({ interviewQuestions: questions });
     } catch (error) {
-      console.error('Failed to fetch interview questions:', error);
+    //   console.error('Failed to fetch interview questions:', error);
     }
   },
   addInterview: async (interview) => {
@@ -67,7 +67,7 @@ const useInterviewStore = create((set) => ({
         interviews: [...state.interviews, newInterview],
       }));
     } catch (error) {
-      console.error('Failed to add interview:', error);
+    //   console.error('Failed to add interview:', error);
     }
   },
   deleteInterview: async (id) => {
@@ -82,12 +82,12 @@ const useInterviewStore = create((set) => ({
         interviews: state.interviews.filter((interview) => interview._id !== id),
       }));
     } catch (error) {
-      console.error('Failed to delete interview:', error);
+     //  console.error('Failed to delete interview:', error);
     }
   },
   addApplication: async (link, interviewId, application) => {
     try {
-      console.log('Adding application:', application); // Debug log
+     //  console.log('Adding application:', application); // Debug log
       const response = await fetch(`https://iviewback.relre.dev/api/interview/${interviewId}/applications`, {
         method: 'POST',
         headers: {
@@ -104,15 +104,15 @@ const useInterviewStore = create((set) => ({
         applications: [...state.applications, newApplication],
       }));
     } catch (error) {
-      console.error('Failed to add application:', error);
+      // console.error('Failed to add application:', error);
     }
   },
   fetchApplications: async (link, interviewId) => {
     try {
-      console.log(`Fetching applications for interview ID: ${interviewId}`);
+      // console.log(`Fetching applications for interview ID: ${interviewId}`);
       const response = await fetch(`https://iviewback.relre.dev/api/interview/${interviewId}/applications`);
       const data = await response.json();
-      console.log('Fetched applications ID and data', interviewId, data);
+      // console.log('Fetched applications ID and data', interviewId, data);
       const nonPendingCount = data.filter((application) => application.status === "pending").length;
       set({
         applications: data,
@@ -120,7 +120,7 @@ const useInterviewStore = create((set) => ({
         nonPendingCount: nonPendingCount,
       });
     } catch (error) {
-      console.error('Failed to fetch applications:', error);
+      // console.error('Failed to fetch applications:', error);
     }
   },
   fetchApplicationById: async (id, applicationId) => {
@@ -133,7 +133,7 @@ const useInterviewStore = create((set) => ({
       const data = await response.json();
       set({ application: data });
     } catch (error) {
-      console.error('Failed to fetch application by ID:', error);
+     //  console.error('Failed to fetch application by ID:', error);
     }
   },
   fetchInterviewById: async (id) => {
@@ -145,7 +145,7 @@ const useInterviewStore = create((set) => ({
       const interview = await response.json();
       return interview;
     } catch (error) {
-      console.error('Failed to fetch interview:', error);
+      // console.error('Failed to fetch interview:', error);
       return null;
     }
   },
@@ -153,10 +153,10 @@ const useInterviewStore = create((set) => ({
     try {
       const response = await fetch(`https://iviewback.relre.dev/api/interview/${id}`);
       const data = await response.json();
-      console.log('Fetched interview:', data); // Log the fetched interview
+     //  console.log('Fetched interview:', data); // Log the fetched interview
       set({ interviewsec: data });
     } catch (error) {
-      console.error('Failed to fetch interview:', error);
+    //   console.error('Failed to fetch interview:', error);
     }
   },
    updateInterview: async (id, updatedInterview) => {
@@ -169,7 +169,7 @@ const useInterviewStore = create((set) => ({
         body: JSON.stringify(updatedInterview),
       });
       const data = await response.json();
-      console.log('Updated interview:', data); // Log the updated interview
+    //   console.log('Updated interview:', data); // Log the updated interview
       set((state) => ({
         interviews: state.interviews.map((interview) =>
           interview._id === id ? data : interview
@@ -177,7 +177,7 @@ const useInterviewStore = create((set) => ({
         interview: data,
       }));
     } catch (error) {
-      console.error('Failed to update interview:', error);
+    //   console.error('Failed to update interview:', error);
     }
   },
   updateApplicationStatus: async (id, applicationId, status) => {
@@ -195,9 +195,9 @@ const useInterviewStore = create((set) => ({
       }
       const updatedApplication = await response.json();
       set({ application: updatedApplication });
-      console.log('Application status updated:', updatedApplication); // Debug log
+     //  console.log('Application status updated:', updatedApplication); // Debug log
     } catch (error) {
-      console.error('Failed to update application status:', error);
+     //  console.error('Failed to update application status:', error);
     }
   },
 }));

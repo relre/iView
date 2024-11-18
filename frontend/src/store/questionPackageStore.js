@@ -15,7 +15,7 @@ const useQuestionPackageStore = create((set) => ({
       const data = await response.json();
       set({ questionPackages: data });
     } catch (error) {
-      console.error(error.message);
+      // console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -35,7 +35,7 @@ const useQuestionPackageStore = create((set) => ({
       const newPackage = await response.json();
       set((state) => ({ questionPackages: [...state.questionPackages, newPackage] }));
     } catch (error) {
-      console.error(error.message);
+     //  console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -57,7 +57,7 @@ const useQuestionPackageStore = create((set) => ({
         questionPackages: state.questionPackages.map(pkg => pkg._id === id ? updatedPackage : pkg)
       }));
     } catch (error) {
-      console.error(error.message);
+     //  console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -76,7 +76,7 @@ const useQuestionPackageStore = create((set) => ({
         questionPackages: state.questionPackages.filter(pkg => pkg._id !== id)
       }));
     } catch (error) {
-      console.error(error.message);
+    //   console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -90,19 +90,19 @@ const useQuestionPackageStore = create((set) => ({
         },
         body: JSON.stringify(question)
       });
-      console.log('API response:', response); // Debugging
+     //  console.log('API response:', response); // Debugging
       if (!response.ok) {
         throw new Error('Failed to add question');
       }
       const questionPackage = await response.json();
       const addedQuestion = questionPackage.questions[questionPackage.questions.length - 1]; // Son eklenen soruyu al
-      console.log('Added question:', addedQuestion); // Debugging
+    //   console.log('Added question:', addedQuestion); // Debugging
       set((state) => ({
         questionPackages: state.questionPackages.map(pkg => pkg._id === packageId ? { ...pkg, questions: [...pkg.questions, addedQuestion] } : pkg)
       }));
       return addedQuestion;
     } catch (error) {
-      console.error(error.message);
+     //  console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -128,7 +128,7 @@ const useQuestionPackageStore = create((set) => ({
       }));
       return updatedQuestion;
     } catch (error) {
-      console.error(error.message);
+     //  console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -154,7 +154,7 @@ const useQuestionPackageStore = create((set) => ({
         ),
       }));
     } catch (error) {
-      console.error(error.message);
+     //  console.error(error.message);
       // Optionally, you can set an error state here
     }
   },
@@ -170,7 +170,7 @@ const updateQuestionOrder = async (packageId, questions) => {
       body: JSON.stringify({ questions }),
     });
   } catch (error) {
-    console.error('Soru sırası güncellenemedi:', error);
+   //  console.error('Soru sırası güncellenemedi:', error);
   }
 };
 

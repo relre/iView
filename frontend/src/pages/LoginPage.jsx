@@ -4,8 +4,8 @@ import useAuthStore from '../store/authStore';
 import logo from '../assets/iview-logo.png'; 
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('o@o.com');
+  const [password, setPassword] = useState('1234');
   const setToken = useAuthStore((state) => state.setToken);
   const navigate = useNavigate();
 

@@ -61,19 +61,19 @@ export const updateApplicationStatus = async (interviewId: string, applicationId
 };
 
 export const getApplicationById = async (interviewId: string, applicationId: string): Promise<IApplication | null> => {
-  console.log(`Fetching interview with ID: ${interviewId}`);
+//    console.log(`Fetching interview with ID: ${interviewId}`);
   const interview = await Interview.findById(interviewId);
   if (!interview) {
-    console.log('Interview not found');
+    //  console.log('Interview not found');
     throw new Error('Interview not found');
   }
-  console.log(`Interview found: ${interview}`);
+ //   console.log(`Interview found: ${interview}`);
   const application = interview.applications.find(app => app._id.toString() === applicationId);
   if (!application) {
-    console.log('Application not found');
+   //   console.log('Application not found');
     throw new Error('Application not found');
   }
-  console.log(`Application found: ${application}`);
+  //  console.log(`Application found: ${application}`);
   return application;
 };
 
@@ -91,7 +91,7 @@ export const updateApplicationDatax = async (interviewId: string, applicationId:
     await interview.save();
     return application;
   } catch (error) {
-    console.error('Error in updateApplicationDatax service:', error);
+   //   console.error('Error in updateApplicationDatax service:', error);
     throw error;
   }
 };
